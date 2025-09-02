@@ -1,0 +1,66 @@
+[
+  {
+    "logo": "https://images.unsplash.com/photo-1669023414180-4dcf35d943e1?q=80&w=1332&auto=format&fit=crop",
+    "title": "Jr. PHP Developer",
+    "skills": "CSS3, HTML5, Javascript, Bootstrap, Jquery",
+    "salary": "$5K - $8K",
+    "openings": 6,
+    "badges": ["Urgent"]
+  },
+  {
+    "logo": "https://media.istockphoto.com/id/1283488555/photo/project-manager-working-with-gantt-chart-planning-schedule.jpg",
+    "title": "Exp. Project Manager",
+    "skills": "CSS3, HTML5, Javascript, Bootstrap, Jquery",
+    "salary": "$6K - $10K",
+    "openings": 4,
+    "badges": []
+  },
+  {
+    "logo": "https://images.unsplash.com/photo-1616469832301-ffaeadc68cf3?q=80&w=1170&auto=format&fit=crop",
+    "title": "Sr. WordPress Developer",
+    "skills": "CSS3, HTML5, Javascript, Bootstrap, Jquery",
+    "salary": "$5K - $8K",
+    "openings": 3,
+    "badges": ["Urgent"]
+  },
+  {
+    "logo": "https://media.istockphoto.com/id/1406248045/photo/business-woman-with-finger-pressing-laravel-button-on-virtual-screens.jpg?s=2048x2048&w=is&k=20&c=ccDHpMRNQS-4oHPOu8P2IE2k-0rMFiNPgKzGdWFKcFw=",
+    "title": "Jr. Laravel Developer",
+    "skills": "CSS3, HTML5, Javascript, Bootstrap, Jquery",
+    "salary": "$4.2K - $6K",
+    "openings": 2,
+    "badges": []
+  },
+  {
+    "logo": "https://media.istockphoto.com/id/1485407613/photo/businessman-working-with-business-analytics-and-data-management-system-on-computer-online.jpg?s=2048x2048&w=is&k=20&c=kM8DKrOsHAl-5W1A7nt1gPG-wIc_pRFluPWa6qxTwYo=",
+    "title": "Sr. UI/UX Designer",
+    "skills": "CSS3, HTML5, Javascript, Bootstrap, Jquery",
+    "salary": "$4K - $5.5K",
+    "openings": 5,
+    "badges": ["Urgent", "Freelancer"]
+  },
+  {
+    "logo": "https://media.istockphoto.com/id/2202389453/photo/futuristic-robotic-hand-interacting-with-programming-code-displays-in-a-high-tech-environment.jpg?s=2048x2048&w=is&k=20&c=-UgL2AdXT2vms6XKvvSp1fx7Z8wrrs_lcITLGkhmWGw=",
+    "title": "Java & Python Developer",
+    "skills": "CSS3, HTML5, Javascript, Bootstrap, Jquery",
+    "salary": "$2K - $4K",
+    "openings": 4,
+    "badges": ["Featured", "Urgent", "Part Time"]
+  },
+  {
+    "logo": "https://media.istockphoto.com/id/1682537549/photo/seo-optimization-modern-tech-php-syntax-highlighted-writing-programming-functions-on-laptop.jpg?s=2048x2048&w=is&k=20&c=0YzBFLbRRnqCC3exWgzPq0MI7Xj3IOyiCPt7nPhxeY4=",
+    "title": "Sr. Code Ignetor Developer",
+    "skills": "CSS3, HTML5, Javascript, Bootstrap, Jquery",
+    "salary": "$5K - $6K",
+    "openings": 3,
+    "badges": ["Urgent", "Full Time"]
+  },
+  {
+    "logo": "https://media.istockphoto.com/id/1794619457/photo/businessman-typing-coding-on-digital-screen-about-cyber-security-digital-information.jpg?s=1024x1024&w=is&k=20&c=chbsCbA8NnbLuuQuDQPF2QHNL0xwPOWrIooWtDjl9v8=",
+    "title": "Sr. Magento Developer",
+    "skills": "CSS3, HTML5, Javascript, Bootstrap, Jquery",
+    "salary": "$3.2K - $5K",
+    "openings": 5,
+    "badges": ["Featured", "Internship"]
+  }
+]
