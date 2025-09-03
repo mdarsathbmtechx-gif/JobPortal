@@ -1,12 +1,17 @@
-// src/components/Navbar.jsx
+// src/modules/Homepages/Layout/Navbar.jsx
 import React, { useState, useEffect } from "react";
-import { Button, Dropdown } from "antd";
+import { Button, Dropdown, Drawer } from "antd";
 import { Link } from "react-router-dom";
+import { FaBars, FaTimes } from "react-icons/fa";
 import logo from "@/assets/Bm Academy logo .png";
+import LoginModal from "../../Auth/LoginModal"; // correct relative path
+import RegisterModal from "../../Auth/RegisterModal"; // correct relative path
 
 export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [drawerVisible, setDrawerVisible] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isRegisterOpen, setIsRegisterOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -15,17 +20,17 @@ export default function Navbar() {
   }, []);
 
   const employerItems = [
-    { key: "1", label: "Recruiter Login" },
-    
+    {
+      key: "1",
+      label: <Link to="/recruiter-home">Recruiter</Link>,
+    },
   ];
 
   return (
     <>
-      {/* Navbar */}
       <nav
         className={`fixed w-full z-20 transition-all duration-300 flex items-center justify-between px-4 md:px-6 h-20
-          ${scrolled ? "bg-white shadow-md" : "bg-transparent"}
-        `}
+          ${scrolled ? "bg-white shadow-md" : "bg-transparent"}`}
       >
         {/* Left: Logo */}
         <div className="flex items-center gap-2">
@@ -53,28 +58,37 @@ export default function Navbar() {
         >
           <Link to="/">Home</Link>
           <Link to="/jobs">Jobs</Link>
-          <Link to="/login">Login</Link>
+          <button
+            onClick={() => setIsLoginOpen(true)}
+            className="text-green-600 font-medium hover:underline"
+          >
+            Login
+          </button>
+          <button
+            onClick={() => setIsRegisterOpen(true)}
+            className="text-green-600 font-medium hover:underline"
+          >
+            Register
+          </button>
         </div>
 
         {/* Right Section (Desktop Only) */}
         <div className="hidden md:flex items-center gap-4">
-          <Link to="/login">
-            <Button
-              type="primary"
-              className="hover:text-green-600 cursor-pointer"
-            >
-              Login
-            </Button>
-          </Link>
+          <Button
+            type="primary"
+            onClick={() => setIsLoginOpen(true)}
+            className="hover:text-green-600 cursor-pointer"
+          >
+            Login
+          </Button>
 
-          <Link to="/register">
-            <Button
-              type="primary"
-              className="!bg-green-600 hover:!bg-green-700 !border-none px-6"
-            >
-              Register
-            </Button>
-          </Link>
+          <Button
+            type="primary"
+            onClick={() => setIsRegisterOpen(true)}
+            className="!bg-green-600 hover:!bg-green-700 !border-none px-6"
+          >
+            Register
+          </Button>
 
           <Dropdown menu={{ items: employerItems }} placement="bottomRight">
             <Button
@@ -93,82 +107,83 @@ export default function Navbar() {
         {/* Mobile Menu Toggle */}
         <div className="md:hidden flex items-center">
           <button
-            onClick={() => setIsOpen(!isOpen)}
+            onClick={() => setDrawerVisible(true)}
             className={`text-2xl font-bold transition-colors duration-300 ${
               scrolled ? "text-gray-800" : "text-white"
             }`}
           >
-            {isOpen ? "✖" : "☰"}
+            <FaBars />
           </button>
         </div>
       </nav>
 
-      {/* Mobile Menu */}
-<div
-  className={`fixed top-0 right-0 h-full w-64 bg-white shadow-lg z-30 transform transition-transform duration-300 ease-in-out md:hidden
-  ${isOpen ? "translate-x-0" : "translate-x-full"}`}
->
-  <div className="p-6 flex flex-col gap-6">
-    <Link
-      to="/"
-      className="font-medium text-gray-700 hover:text-green-700"
-      onClick={() => setIsOpen(false)}
-    >
-      Home
-    </Link>
-    <Link
-      to="/jobs"
-      className="font-medium text-gray-700 hover:text-green-700"
-      onClick={() => setIsOpen(false)}
-    >
-      Jobs
-    </Link>
-    <Link
-      to="/companies"
-      className="font-medium text-gray-700 hover:text-green-700"
-      onClick={() => setIsOpen(false)}
-    >
-      Companies
-    </Link>
-    <Link
-      to="/services"
-      className="font-medium text-gray-700 hover:text-green-700"
-      onClick={() => setIsOpen(false)}
-    >
-      Services
-    </Link>
-
-    <Link to="/login" onClick={() => setIsOpen(false)}>
-      <Button
-        type="primary"
-        className="!text-gray-700 hover:!text-green-700 font-medium text-left w-full"
+      {/* Mobile Drawer */}
+      <Drawer
+        title={
+          <div className="flex items-center justify-between">
+            <span className="font-bold text-lg">Menu</span>
+            <FaTimes
+              className="cursor-pointer text-lg"
+              onClick={() => setDrawerVisible(false)}
+            />
+          </div>
+        }
+        placement="right"
+        onClose={() => setDrawerVisible(false)}
+        open={drawerVisible}
       >
-        Login
-      </Button>
-    </Link>
+        <div className="flex flex-col gap-6 mt-4">
+          <Link to="/" onClick={() => setDrawerVisible(false)}>
+            Home
+          </Link>
+          <Link to="/jobs" onClick={() => setDrawerVisible(false)}>
+            Jobs
+          </Link>
+          <Link to="/companies" onClick={() => setDrawerVisible(false)}>
+            Companies
+          </Link>
+          <Link to="/services" onClick={() => setDrawerVisible(false)}>
+            Services
+          </Link>
 
-    <Link to="/register" onClick={() => setIsOpen(false)}>
-      <Button
-        type="primary"
-        className="!bg-green-700 hover:!bg-green-800 !border-none w-full"
-      >
-        Register
-      </Button>
-    </Link>
+          <Button
+            type="primary"
+            onClick={() => {
+              setIsLoginOpen(true);
+              setDrawerVisible(false);
+            }}
+            className="!text-gray-700 hover:!text-green-700 font-medium text-left w-full"
+          >
+            Login
+          </Button>
 
-    <div className="mt-4">
-      <p className="font-semibold text-gray-700 mb-2">For Employers</p>
-      <Link
-        to="/recruiter-login"
-        className="block text-gray-600 hover:text-green-700"
-        onClick={() => setIsOpen(false)}
-      >
-        Recruiter Login
-      </Link>
-    </div>
-  </div>
-</div>
+          <Button
+            type="primary"
+            onClick={() => {
+              setIsRegisterOpen(true);
+              setDrawerVisible(false);
+            }}
+            className="!bg-green-700 hover:!bg-green-800 !border-none w-full"
+          >
+            Register
+          </Button>
 
+          <div className="mt-4">
+            <p className="font-semibold text-gray-700 mb-2">For Employers</p>
+            <Link
+              to="/recruiter"
+              className="block text-gray-600 hover:text-green-700"
+              onClick={() => setDrawerVisible(false)}
+            >
+              Recruiter Login
+            </Link>
+          </div>
+        </div>
+      </Drawer>
+
+      {/* Modals */}
+      <LoginModal visible={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
+      <RegisterModal visible={isRegisterOpen} onClose={() => setIsRegisterOpen(false)} />
     </>
   );
 }

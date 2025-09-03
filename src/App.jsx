@@ -9,6 +9,9 @@ import Register from "./modules/Auth/Register";
 import Login from "./modules/Auth/Login";
 import Jobs from "./modules/Homepages/Pages/Jobs";
 import { Scrolltotop } from "./Scrolltotop";
+import CategorySection from "./modules/Homepages/Pages/Category";
+import RecruiterRegister from "./modules/Recruiter/RecruiterRegister";  // ✅ Import Recruiter Register
+import RecruiterHome from "./modules/Recruiter/RecruiterHome";
 
 function App() {
   return (
@@ -22,6 +25,7 @@ function App() {
             element={
               <>
                 <Hero />
+                <CategorySection />
                 <JobGrid />
                 <Testimonials />
               </>
@@ -29,12 +33,12 @@ function App() {
           />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/jobs" element={<Jobs />} />
+          <Route path="/jobs" element={<Jobs />} /> 
+          <Route path="/recruiter-home" element={<RecruiterHome />} /> {/* ✅ Recruiter Home */}
         </Route>
       </Routes>
     </>
   );
 }
-
 
 export default App;

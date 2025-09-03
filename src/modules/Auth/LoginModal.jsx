@@ -1,13 +1,13 @@
-// src/pages/Login.jsx
+// src/components/LoginModal.jsx
 import React, { useState } from "react";
-import { Form, Input, Button, Divider, Typography } from "antd";
+import { Modal, Form, Input, Button, Divider, Typography } from "antd";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import axios from "axios";
 
 const { Title, Text, Link } = Typography;
 
-export default function Login() {
+export default function LoginModal({ visible, onClose }) {
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (values) => {
@@ -16,6 +16,7 @@ export default function Login() {
       const response = await axios.post("http://localhost:5000/api/auth/login", values);
       alert("Login successful!");
       console.log("User data:", response.data);
+      onClose(); // Close the modal after login
     } catch (error) {
       console.error(error);
       alert("Login failed. Check your credentials.");
@@ -25,13 +26,19 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-[#004546] to-[#006d66] px-4">
-      <div className="mt-18 max-w-5xl w-full bg-white shadow-lg rounded-xl flex flex-col md:flex-row overflow-hidden">
-        
+    <Modal
+      visible={visible}
+      onCancel={onClose}
+      footer={null}
+      centered
+      width={600}
+      className="!p-0"
+    >
+      <div className="flex flex-col md:flex-row">
         {/* Left Info Section */}
-        <div className="w-full md:w-1/3 bg-gray-50 p-8 flex flex-col justify-center border-r">
-          <Title level={4} className="!mb-6">Welcome Back!</Title>
-          <ul className="space-y-4 text-gray-700">
+        <div className="w-full md:w-1/3 bg-gray-50 p-6 flex flex-col justify-center border-r">
+          <Title level={4} className="!mb-4">Welcome Back!</Title>
+          <ul className="space-y-2 text-gray-700 text-sm">
             <li>Access thousands of jobs instantly</li>
             <li>Stay updated with latest job postings</li>
             <li>Continue your career journey with us</li>
@@ -39,43 +46,32 @@ export default function Login() {
         </div>
 
         {/* Right Form Section */}
-        <div className="w-full md:w-2/3 p-10">
-          <Title level={3} className="!mb-6 text-gray-800">
+        <div className="w-full md:w-2/3 p-6">
+          <Title level={3} className="!mb-4 text-gray-800">
             Login to your account
           </Title>
 
           <Form layout="vertical" onFinish={handleSubmit} className="space-y-3">
-            {/* Email */}
             <Form.Item
               label="Email ID / Username"
               name="email"
               rules={[{ required: true, message: "Please enter your email/username" }]}
             >
-              <Input
-                prefix={<FaEnvelope className="text-gray-400" />}
-                placeholder="Enter your Email / Username"
-              />
+              <Input prefix={<FaEnvelope className="text-gray-400" />} placeholder="Enter your Email / Username" />
             </Form.Item>
 
-            {/* Password */}
             <Form.Item
               label="Password"
               name="password"
               rules={[{ required: true, message: "Please enter your password" }]}
             >
-              <Input.Password
-                prefix={<FaLock className="text-gray-400" />}
-                placeholder="Enter your password"
-              />
+              <Input.Password prefix={<FaLock className="text-gray-400" />} placeholder="Enter your password" />
             </Form.Item>
 
             <div className="flex justify-end mb-2">
-              <Link href="#" className="text-sm">
-                Forgot Password?
-              </Link>
+              <Link href="#" className="text-sm">Forgot Password?</Link>
             </div>
 
-            {/* Login Button */}
             <Button
               type="primary"
               htmlType="submit"
@@ -88,14 +84,10 @@ export default function Login() {
             </Button>
           </Form>
 
-          {/* OTP Login */}
-          <div className="text-center mt-4">
-            <Link href="#" className="text-sm font-medium">
-              Use OTP to Login
-            </Link>
+          <div className="text-center mt-3">
+            <Link href="#" className="text-sm font-medium">Use OTP to Login</Link>
           </div>
 
-          {/* OR Google Login */}
           <Divider plain>Or</Divider>
           <Button
             block
@@ -105,14 +97,12 @@ export default function Login() {
             <FcGoogle className="text-xl" /> Continue with Google
           </Button>
 
-          <p className="text-center text-sm text-gray-600 mt-4">
+          <p className="text-center text-sm text-gray-600 mt-3">
             New to our platform?{" "}
-            <a href="/register" className="text-green-600 hover:underline">
-              Register for free
-            </a>
+            <a href="/register" className="text-green-600 hover:underline">Register for free</a>
           </p>
         </div>
       </div>
-    </div>
+    </Modal>
   );
 }

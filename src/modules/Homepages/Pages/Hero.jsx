@@ -41,47 +41,50 @@ export default function Hero() {
       style={{
         backgroundImage: `url(${Image})`,
         minHeight: "75vh",
-        paddingTop: "200px",
+        paddingTop: "120px",
       }}
     >
       {/* Overlay */}
       <div className="absolute inset-0 bg-black/50"></div>
 
       {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 flex flex-col md:flex-row items-center justify-between gap-12 w-full">
-        {/* Left: Text + Stats */}
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-10 w-full">
+        
+        {/* Left: Text */}
         <div className="text-white md:w-1/2 w-full text-center md:text-left">
-          <p className="text-green-500 mb-2 text-sm sm:text-base">
+          <p className="text-green-500 mb-2 text-sm sm:text-base lg:text-lg">
             Get Hot & Trending Jobs
           </p>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 leading-snug">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 leading-snug">
             Real Jobs, Real People, Real Success
           </h1>
-          <p className="mb-8 text-sm sm:text-base">
+          <p className="mb-8 text-sm sm:text-base lg:text-lg max-w-xl mx-auto md:mx-0">
             Getting a new job is never easy. Check what new jobs we have in
             store for you on JobStock.
           </p>
 
-          <div className="flex flex-wrap justify-center md:justify-start gap-6 text-xl sm:text-2xl">
+          {/* Stats */}
+          <div className="flex flex-wrap justify-center md:justify-start gap-6">
             {stats.map((stat) => (
               <div key={stat.id} className="text-center md:text-left">
-                <span className="font-bold text-white block text-2xl sm:text-3xl">
+                <span className="font-bold block text-2xl sm:text-3xl lg:text-4xl">
                   {stat.value}
                 </span>
-                <p className="text-sm">{stat.label}</p>
+                <p className="text-sm sm:text-base">{stat.label}</p>
               </div>
             ))}
           </div>
         </div>
 
         {/* Right: Job Search Form */}
-        <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-xl md:w-1/3 w-full relative z-10">
-          <h2 className="text-xl sm:text-2xl font-bold mb-6 text-center md:text-left">
-            Grow Your Career With <span className="text-green-600">ABM PORTAL</span>
+        <div className="bg-white p-5 sm:p-6 lg:p-8 rounded-2xl shadow-xl w-full md:w-1/2 lg:w-1/3 relative z-10">
+          <h2 className="text-lg sm:text-xl lg:text-2xl font-bold mb-6 text-center md:text-left">
+            Grow Your Career With{" "}
+            <span className="text-green-600">ABM PORTAL</span>
           </h2>
 
           <Form layout="vertical" onFinish={handleSearch}>
-            {/* Search Keywords */}
+            {/* Keywords */}
             <Form.Item>
               <Input
                 placeholder="Search Job Keywords..."
@@ -92,8 +95,8 @@ export default function Hero() {
               />
             </Form.Item>
 
-            {/* Row 1: Category + Type */}
-            <div className="grid grid-cols-2 gap-4">
+            {/* Row 1 */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Form.Item>
                 <Select
                   placeholder="Select Category"
@@ -127,8 +130,8 @@ export default function Hero() {
               </Form.Item>
             </div>
 
-            {/* Row 2: Level + Experience */}
-            <div className="grid grid-cols-2 gap-4">
+            {/* Row 2 */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Form.Item>
                 <Select
                   placeholder="Select Level"
@@ -162,7 +165,7 @@ export default function Hero() {
               </Form.Item>
             </div>
 
-            {/* Row 3: Salary */}
+            {/* Row 3 */}
             <Form.Item>
               <Select
                 placeholder="Expected Salary"
@@ -178,7 +181,7 @@ export default function Hero() {
               </Select>
             </Form.Item>
 
-            {/* Submit Button */}
+            {/* Submit */}
             <Form.Item>
               <Button
                 type="primary"
@@ -193,16 +196,16 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Wave SVG at bottom */}
+      {/* Bottom Wave */}
       <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none z-0">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 1440 320"
           preserveAspectRatio="none"
-          className="w-full h-24 sm:h-32 md:h-40 lg:h-48"
+          className="w-full h-20 sm:h-28 md:h-36 lg:h-48"
         >
           <path
-            fill="#ffffffff"
+            fill="#ffffff"
             fillOpacity="1"
             d="M0,224 C 360,300 1080,150 1440,240 L1440,320 L0,320 Z"
           ></path>
