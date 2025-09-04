@@ -1,8 +1,8 @@
 // src/modules/Homepages/Layout/Navbar.jsx
 import React, { useState, useEffect } from "react";
-import { Button, Dropdown, Drawer } from "antd";
+import { Button, Dropdown, Drawer, Menu } from "antd";
 import { Link } from "react-router-dom";
-import { FaBars, FaTimes } from "react-icons/fa";
+import { FaBars, FaTimes, FaUserCircle } from "react-icons/fa";
 import logo from "@/assets/Bm Academy logo .png";
 import LoginModal from "../../Auth/LoginModal"; // correct relative path
 import RegisterModal from "../../Auth/RegisterModal"; // correct relative path
@@ -18,6 +18,18 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Profile dropdown menu
+  const profileMenu = (
+    <Menu>
+      <Menu.Item key="1">
+        <Link to="/profile">Profile</Link>
+      </Menu.Item>
+      <Menu.Item key="2">
+        <button onClick={() => alert("Logout clicked!")}>Logout</button>
+      </Menu.Item>
+    </Menu>
+  );
 
   const employerItems = [
     {
@@ -42,9 +54,8 @@ export default function Navbar() {
             />
           </Link>
           <span
-            className={`font-bold text-lg transition-colors duration-300 ${
-              scrolled ? "text-gray-800" : "text-white"
-            }`}
+            className={`font-bold text-lg transition-colors duration-300 ${scrolled ? "text-gray-800" : "text-white"
+              }`}
           >
             ABM PORTAL
           </span>
@@ -52,18 +63,13 @@ export default function Navbar() {
 
         {/* Center Nav Links (Desktop Only) */}
         <div
-          className={`hidden md:flex gap-8 font-medium transition-colors duration-300 ${
-            scrolled ? "text-gray-800" : "text-white"
-          }`}
+          className={`hidden md:flex gap-8 font-medium transition-colors duration-300 ${scrolled ? "text-gray-800" : "text-white"
+            }`}
         >
           <Link to="/">Home</Link>
           <Link to="/jobs">Jobs</Link>
-          <button
-            onClick={() => setIsLoginOpen(true)}
-            className="text-green-600 font-medium hover:underline"
-          >
-            Login
-          </button>
+          <Link to="/companies">Companies</Link>
+          
           <button
             onClick={() => setIsRegisterOpen(true)}
             className="text-green-600 font-medium hover:underline"
@@ -90,16 +96,21 @@ export default function Navbar() {
             Register
           </Button>
 
-          <Dropdown menu={{ items: employerItems }} placement="bottomRight">
+          <Button
+            type="primary"
+            onClick={() => window.location.href = "/recruiter-home"}
+            className="!bg-green-600 hover:!bg-green-700 !border-none px-6"
+          >
+            Recruiter
+          </Button>
+
+          {/* Profile Dropdown */}
+          <Dropdown overlay={profileMenu} placement="bottomRight" arrow>
             <Button
-              type="text"
-              className={`transition-colors duration-300 ${
-                scrolled
-                  ? "!text-gray-800 hover:!text-green-600"
-                  : "!text-white hover:!text-green-400"
-              }`}
+              type="primary"
+              className="!bg-blue-600 hover:!bg-blue-700 !border-none px-6 flex items-center gap-2"
             >
-              For Employers
+              <FaUserCircle /> Profile
             </Button>
           </Dropdown>
         </div>
@@ -108,9 +119,8 @@ export default function Navbar() {
         <div className="md:hidden flex items-center">
           <button
             onClick={() => setDrawerVisible(true)}
-            className={`text-2xl font-bold transition-colors duration-300 ${
-              scrolled ? "text-gray-800" : "text-white"
-            }`}
+            className={`text-2xl font-bold transition-colors duration-300 ${scrolled ? "text-gray-800" : "text-white"
+              }`}
           >
             <FaBars />
           </button>
@@ -169,13 +179,21 @@ export default function Navbar() {
           </Button>
 
           <div className="mt-4">
-            <p className="font-semibold text-gray-700 mb-2">For Employers</p>
             <Link
               to="/recruiter"
-              className="block text-gray-600 hover:text-green-700"
+              className="font-semibold text-gray-700 hover:text-green-700 mt-4 block"
               onClick={() => setDrawerVisible(false)}
             >
-              Recruiter Login
+              Recruiter
+            </Link>
+
+            {/* Mobile Profile Link */}
+            <Link
+              to="/profile"
+              className="font-semibold text-blue-700 hover:text-blue-900 mt-2 block"
+              onClick={() => setDrawerVisible(false)}
+            >
+              Profile
             </Link>
           </div>
         </div>

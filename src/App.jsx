@@ -8,11 +8,12 @@ import Jobs from "./modules/Homepages/Pages/Jobs";
 import { Scrolltotop } from "./Scrolltotop";  
 import RecruiterHome from "./modules/Recruiter/RecruiterHome";
 import RecruiterLayout from "./modules/Recruiter/RecruiterLayout/RecruiterLayout";  
-
 // ---- Add missing imports ----
 import PostJob from "./modules/Recruiter/Pages/PostJob";
 import JobList from "./modules/Recruiter/Pages/JobList";
 import Applicants from "./modules/Recruiter/Pages/Applicants";
+import Profile from "./modules/Homepages/Pages/Profile";
+import Companies from "./modules/Homepages/Pages/Companies";
 
 function App() {
   return (
@@ -24,8 +25,9 @@ function App() {
           <Route path="/" element={<Homepage />} />
           <Route path="/jobseekers" element={<Homepage />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/companies" element={<Companies />} />
           <Route path="/jobs" element={<Jobs />} /> 
+          <Route path="/profile" element={<Profile/>}/>
         </Route>
 
         {/* ---------- Recruiter Layout ---------- */}
