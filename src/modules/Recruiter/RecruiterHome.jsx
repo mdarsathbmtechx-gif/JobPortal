@@ -1,19 +1,70 @@
 import React, { useState, useEffect } from "react";
-import { Card, Button, Typography, Row, Col, Input } from "antd";
+import { Card, Button, Typography, Row, Col, Input, message, Tabs } from "antd";
 import { FaUserTie, FaUsers, FaSearch } from "react-icons/fa";
+import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
+import RecruiterNavbar from "./RecruiterLayout/RecruiterNavbar";
 
 const { Title, Text } = Typography;
 
 export default function RecruiterHome() {
+  const [activeTab, setActiveTab] = useState("register");
   const [formVisible, setFormVisible] = useState(false);
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    mobile: "",
+    password: "",
+    confirmPassword: "",
+    terms: false,
+  });
 
   useEffect(() => {
     const timer = setTimeout(() => setFormVisible(true), 300);
     return () => clearTimeout(timer);
   }, []);
 
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  const handleSubmit = () => {
+    const { fullName, email, mobile, password, confirmPassword, terms } = formData;
+
+    if (!fullName || !email || !mobile || !password || !confirmPassword) {
+      message.error("Please fill in all fields");
+      return;
+    }
+    if (!terms) {
+      message.error("You must agree to the Terms & Conditions");
+      return;
+    }
+    if (password !== confirmPassword) {
+      message.error("Passwords do not match");
+      return;
+    }
+
+    message.success("Registered successfully!");
+    console.log("Form Data:", formData);
+
+    setFormData({
+      fullName: "",
+      email: "",
+      mobile: "",
+      password: "",
+      confirmPassword: "",
+      terms: false,
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Navbar */}
+      <RecruiterNavbar />
+
       {/* Hero Section */}
       <section className="relative bg-gradient-to-r from-green-700 to-teal-600 text-white overflow-hidden">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between py-20 px-6">
@@ -37,51 +88,84 @@ export default function RecruiterHome() {
             </Button>
           </div>
 
-          {/* Sales Enquiry Form */}
+          {/* Register / Auth Form */}
           <div
             className={`md:w-96 bg-white text-gray-800 p-6 rounded-xl shadow-xl transform transition-transform duration-700 ease-out
               ${formVisible ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"}`}
           >
-            <Text className="font-bold text-lg block mb-4">Sales Enquiry</Text>
-
-            {["Full Name", "Mobile Number", "Email"].map((label, index) => (
-              <div
-                key={label}
-                className={`mb-3 transition-opacity duration-700 ease-out ${
-                  formVisible ? "opacity-100" : "opacity-0"
-                }`}
-                style={{ transitionDelay: `${index * 150}ms` }}
-              >
-                <label className="text-gray-600 text-sm font-medium mb-1 block">{label}</label>
-                <Input placeholder={`Enter your ${label.toLowerCase()}`} className="rounded-md" />
-              </div>
-            ))}
-
-            {/* Hired For Section */}
-            <div
-              className={`mb-4 transition-opacity duration-700 ease-out ${
-                formVisible ? "opacity-100" : "opacity-0"
-              }`}
-              style={{ transitionDelay: "450ms" }}
-            >
-              <Text className="text-gray-600 text-sm font-medium block mb-1">Hired For</Text>
-              <div className="flex gap-2">
-                <Input placeholder="Your Company" className="rounded-md" />
-                <Input placeholder="Your Consultancy" className="rounded-md" />
-              </div>
-            </div>
-
-            {/* Submit Button */}
-            <Button
-              type="primary"
+            <Tabs
+              activeKey={activeTab}
+              onChange={setActiveTab}
+              type="card"
               size="large"
-              className={`bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg w-full mt-2 transition-opacity duration-700 ease-out ${
-                formVisible ? "opacity-100" : "opacity-0"
-              }`}
-              style={{ transitionDelay: "600ms" }}
-            >
-              Request Callback
-            </Button>
+              items={[
+                {
+                  key: "sales",
+                  label: "Sales Enquiry",
+                  children: <div className="p-4 text-gray-700"> {/* Sales enquiry form can go here */} </div>,
+                },
+                {
+                  key: "register",
+                  label: "Register",
+                  children: (
+                    <div className="flex flex-col gap-4 p-2">
+                      {[
+                        { label: "Full Name", name: "fullName", type: "text" },
+                        { label: "Email", name: "email", type: "email" },
+                        { label: "Mobile Number", name: "mobile", type: "text" },
+                        { label: "Password", name: "password", type: "password" },
+                        { label: "Confirm Password", name: "confirmPassword", type: "password" },
+                      ].map((field) => (
+                        <div key={field.name}>
+                          <label className="text-gray-600 text-sm font-medium mb-1 block">{field.label}</label>
+                          <Input
+                            type={field.type}
+                            name={field.name}
+                            placeholder={`Enter your ${field.label.toLowerCase()}`}
+                            value={formData[field.name]}
+                            onChange={handleChange}
+                            className="rounded-md"
+                            iconRender={
+                              field.type === "password"
+                                ? (visible) => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)
+                                : undefined
+                            }
+                          />
+                        </div>
+                      ))}
+
+                      <div className="flex items-center mb-4">
+                        <input
+                          type="checkbox"
+                          name="terms"
+                          id="terms"
+                          checked={formData.terms}
+                          onChange={handleChange}
+                          className="mr-2"
+                        />
+                        <label htmlFor="terms" className="text-gray-600 text-sm">
+                          I agree to the{" "}
+                          <span className="text-blue-500 underline cursor-pointer">Terms & Conditions</span>
+                        </label>
+                      </div>
+
+                      <Button
+                        type="primary"
+                        className="w-full bg-green-600 hover:bg-green-700 text-white"
+                        onClick={handleSubmit}
+                      >
+                        Register
+                      </Button>
+
+                      <Text className="block mt-4 text-center text-gray-500 text-sm">
+                        Already have an account?{" "}
+                        <span className="text-blue-500 underline cursor-pointer">Log in</span>
+                      </Text>
+                    </div>
+                  ),
+                },
+              ]}
+            />
           </div>
         </div>
       </section>
