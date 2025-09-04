@@ -4,6 +4,7 @@ import Hero from "./Hero";
 import CategorySection from "./Category";
 import JobGrid from "./JobGrid";
 import Testimonials from "./Testimonials";
+import CompanyGrid from "./CompanyGrid";
 
 export default function Homepage() {
   return (
@@ -11,6 +12,7 @@ export default function Homepage() {
       <Hero />
       <CategorySection />
       <JobGrid />
+      <CompanyGrid/>
       <Testimonials />
     </>
   );
