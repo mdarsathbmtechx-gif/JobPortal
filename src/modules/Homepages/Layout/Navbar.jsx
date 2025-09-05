@@ -1,11 +1,11 @@
 // src/modules/Homepages/Layout/Navbar.jsx
 import React, { useState, useEffect } from "react";
-import { Button, Dropdown, Drawer, Menu } from "antd";
-import { Link } from "react-router-dom";
-import { FaBars, FaTimes, FaUserCircle } from "react-icons/fa";
+import { Button, Drawer } from "antd";
+import { Link, useNavigate, useLocation } from "react-router-dom"; // ✅ added useLocation here
+import { FaBars, FaTimes } from "react-icons/fa";
 import logo from "@/assets/Bm Academy logo .png";
-import LoginModal from "../../Auth/LoginModal"; // correct relative path
-import RegisterModal from "../../Auth/RegisterModal"; // correct relative path
+import LoginModal from "../../Auth/LoginModal";
+import RegisterModal from "../../Auth/RegisterModal";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -13,30 +13,21 @@ export default function Navbar() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
 
+  const navigate = useNavigate();
+  const location = useLocation(); // ✅ now works
+
+  // Don’t show navbar on dashboard
+  if (location.pathname.startsWith("/dashboard")) {
+    return null;
+  }
+  console.log("Current path:", location.pathname);
+
+
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  // Profile dropdown menu
-  const profileMenu = (
-    <Menu>
-      <Menu.Item key="1">
-        <Link to="/profile">Profile</Link>
-      </Menu.Item>
-      <Menu.Item key="2">
-        <button onClick={() => alert("Logout clicked!")}>Logout</button>
-      </Menu.Item>
-    </Menu>
-  );
-
-  const employerItems = [
-    {
-      key: "1",
-      label: <Link to="/recruiter-home">Recruiter</Link>,
-    },
-  ];
 
   return (
     <>
@@ -54,8 +45,9 @@ export default function Navbar() {
             />
           </Link>
           <span
-            className={`font-bold text-lg transition-colors duration-300 ${scrolled ? "text-gray-800" : "text-white"
-              }`}
+            className={`font-bold text-lg transition-colors duration-300 ${
+              scrolled ? "text-gray-800" : "text-white"
+            }`}
           >
             ABM PORTAL
           </span>
@@ -63,13 +55,14 @@ export default function Navbar() {
 
         {/* Center Nav Links (Desktop Only) */}
         <div
-          className={`hidden md:flex gap-8 font-medium transition-colors duration-300 ${scrolled ? "text-gray-800" : "text-white"
-            }`}
+          className={`hidden md:flex gap-8 font-medium transition-colors duration-300 ${
+            scrolled ? "text-green-800" : "text-green"
+          }`}
         >
           <Link to="/">Home</Link>
           <Link to="/jobs">Jobs</Link>
           <Link to="/companies">Companies</Link>
-          
+
           <button
             onClick={() => setIsRegisterOpen(true)}
             className="text-green-600 font-medium hover:underline"
@@ -98,29 +91,20 @@ export default function Navbar() {
 
           <Button
             type="primary"
-            onClick={() => window.location.href = "/recruiter-home"}
+            onClick={() => (window.location.href = "/recruiter-home")}
             className="!bg-green-600 hover:!bg-green-700 !border-none px-6"
           >
             Recruiter
           </Button>
-
-          {/* Profile Dropdown */}
-          <Dropdown overlay={profileMenu} placement="bottomRight" arrow>
-            <Button
-              type="primary"
-              className="!bg-blue-600 hover:!bg-blue-700 !border-none px-6 flex items-center gap-2"
-            >
-              <FaUserCircle /> Profile
-            </Button>
-          </Dropdown>
         </div>
 
         {/* Mobile Menu Toggle */}
         <div className="md:hidden flex items-center">
           <button
             onClick={() => setDrawerVisible(true)}
-            className={`text-2xl font-bold transition-colors duration-300 ${scrolled ? "text-gray-800" : "text-white"
-              }`}
+            className={`text-2xl font-bold transition-colors duration-300 ${
+              scrolled ? "text-gray-800" : "text-white"
+            }`}
           >
             <FaBars />
           </button>
@@ -142,7 +126,7 @@ export default function Navbar() {
         onClose={() => setDrawerVisible(false)}
         open={drawerVisible}
       >
-        <div className="flex flex-col gap-6 mt-4">
+        <div className="!bg-green-700 hover:!bg-green-800 !border-none w-full">
           <Link to="/" onClick={() => setDrawerVisible(false)}>
             Home
           </Link>
@@ -180,28 +164,30 @@ export default function Navbar() {
 
           <div className="mt-4">
             <Link
-              to="/recruiter"
+              to="/recruiter-home"
               className="font-semibold text-gray-700 hover:text-green-700 mt-4 block"
               onClick={() => setDrawerVisible(false)}
             >
               Recruiter
-            </Link>
-
-            {/* Mobile Profile Link */}
-            <Link
-              to="/profile"
-              className="font-semibold text-blue-700 hover:text-blue-900 mt-2 block"
-              onClick={() => setDrawerVisible(false)}
-            >
-              Profile
             </Link>
           </div>
         </div>
       </Drawer>
 
       {/* Modals */}
-      <LoginModal visible={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
-      <RegisterModal visible={isRegisterOpen} onClose={() => setIsRegisterOpen(false)} />
+      <LoginModal
+        visible={isLoginOpen}
+        onClose={() => setIsLoginOpen(false)}
+        onLoginSuccess={() => {
+          setIsLoginOpen(false);
+          navigate("/dashboard"); // redirect after login
+        }}
+      />
+
+      <RegisterModal
+        visible={isRegisterOpen}
+        onClose={() => setIsRegisterOpen(false)}
+      />
     </>
   );
 }

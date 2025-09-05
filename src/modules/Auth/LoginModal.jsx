@@ -1,25 +1,32 @@
 // src/components/LoginModal.jsx
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Modal, Form, Input, Button, Divider, Typography } from "antd";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import axios from "axios";
 
-const { Title, Text, Link } = Typography;
+const { Title, Link } = Typography;
 
 export default function LoginModal({ visible, onClose }) {
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (values) => {
     setLoading(true);
     try {
-      const response = await axios.post("http://localhost:5000/api/auth/login", values);
-      alert("Login successful!");
-      console.log("User data:", response.data);
-      onClose(); // Close the modal after login
+      // 🔹 Fake login (no backend yet)
+      if (values.email && values.password) {
+        // save to localStorage so we know user is logged in
+        localStorage.setItem("user", JSON.stringify({ email: values.email }));
+
+        onClose(); // close modal
+        navigate("/user-dashboard"); // redirect
+      } else {
+        alert("Invalid credentials. Try again.");
+      }
     } catch (error) {
       console.error(error);
-      alert("Login failed. Check your credentials.");
+      alert("Login failed.");
     } finally {
       setLoading(false);
     }
@@ -27,7 +34,7 @@ export default function LoginModal({ visible, onClose }) {
 
   return (
     <Modal
-      visible={visible}
+      open={visible}   // ✅ use `open` instead of `visible` (AntD v5)
       onCancel={onClose}
       footer={null}
       centered

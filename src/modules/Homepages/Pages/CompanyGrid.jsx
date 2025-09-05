@@ -1,6 +1,5 @@
 // src/components/CompanyGrid.jsx
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { Card, Tag, Button } from "antd";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -26,9 +25,10 @@ export default function CompanyGrid() {
   const [followed, setFollowed] = useState({}); // Track follow state
 
   useEffect(() => {
-    axios
-      .get("/CompaniesGrid.json")
-      .then((res) => setCompanies(res.data.companies || []))
+    // Fetch the JSON file from public folder
+    fetch("/CompaniesGrid.json")
+      .then((res) => res.json())
+      .then((data) => setCompanies(data || []))
       .catch((err) => console.error("Error fetching companies:", err));
 
     AOS.init({ duration: 800, once: true });
@@ -56,7 +56,7 @@ export default function CompanyGrid() {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
         {companies.map((company, idx) => (
           <Card
-            key={company.id}
+            key={company.name + idx}
             hoverable
             cover={
               <img
