@@ -8,12 +8,12 @@ import CompanyGrid from "./CompanyGrid";
 
 export default function Homepage() {
   return (
-    <>
+    <div className="pt-20"> {/* ensures content starts below fixed navbar */}
       <Hero />
       <CategorySection />
       <JobGrid />
       <CompanyGrid/>
       <Testimonials />
-    </>
+    </div>
   );
 }

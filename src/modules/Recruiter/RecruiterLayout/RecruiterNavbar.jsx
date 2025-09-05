@@ -1,3 +1,4 @@
+// src/modules/Recruiter/Layout/RecruiterNavbar.jsx
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Menu, Drawer } from "antd";
@@ -149,7 +150,16 @@ export default function RecruiterNavbar() {
       </Drawer>
 
       {/* Recruiter Login Popup */}
-      <RecruiterLogin open={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
+      <RecruiterLogin
+        open={isLoginOpen}
+        onClose={() => setIsLoginOpen(false)}
+        onLoginSuccess={(recruiter) => {
+          // Save recruiter session
+          localStorage.setItem("recruiter", JSON.stringify(recruiter));
+          setIsLoginOpen(false);
+          navigate("/recruiter-home"); // ✅ Redirect to recruiter dashboard
+        }}
+      />
     </>
   );
 }

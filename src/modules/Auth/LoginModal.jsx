@@ -34,13 +34,11 @@ export default function LoginModal({ visible, onClose }) {
 
   return (
     <Modal
-      open={visible}   // ✅ use `open` instead of `visible` (AntD v5)
-      onCancel={onClose}
-      footer={null}
-      centered
-      width={600}
-      className="!p-0"
-    >
+  open={visible}        // in AntD v5, use `open` instead of `visible`
+  onCancel={onClose}
+  destroyOnHidden       // replaces destroyOnClose
+>
+
       <div className="flex flex-col md:flex-row">
         {/* Left Info Section */}
         <div className="w-full md:w-1/3 bg-gray-50 p-6 flex flex-col justify-center border-r">

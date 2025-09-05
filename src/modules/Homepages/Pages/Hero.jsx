@@ -1,4 +1,3 @@
-// src/components/Hero.jsx
 import React, { useState, useEffect } from "react";
 import { Input, Select, Button, Form } from "antd";
 import Image from "@/assets/hero-bg.jpg";
@@ -37,34 +36,28 @@ export default function Hero() {
 
   return (
     <section
-      className="relative flex items-center bg-cover bg-center"
-      style={{
-        backgroundImage: `url(${Image})`,
-        minHeight: "75vh",
-        paddingTop: "120px",
-      }}
+      className="relative flex items-center bg-cover bg-center min-h-[75vh] pt-[100px] sm:pt-[120px]"
+      style={{ backgroundImage: `url(${Image})` }}
     >
       {/* Overlay */}
       <div className="absolute inset-0 bg-black/50"></div>
 
       {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-10 w-full">
-        
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6 md:gap-10 w-full">
         {/* Left: Text */}
-        <div className="text-white md:w-1/2 w-full text-center md:text-left">
+        <div className="text-white md:w-1/2 w-full text-center md:text-left px-2 sm:px-4">
           <p className="text-green-500 mb-2 text-sm sm:text-base lg:text-lg">
             Get Hot & Trending Jobs
           </p>
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 leading-snug">
             Real Jobs, Real People, Real Success
           </h1>
-          <p className="mb-8 text-sm sm:text-base lg:text-lg max-w-xl mx-auto md:mx-0">
-            Getting a new job is never easy. Check what new jobs we have in
-            store for you on JobStock.
+          <p className="mb-6 sm:mb-8 text-sm sm:text-base lg:text-lg max-w-xl mx-auto md:mx-0">
+            Getting a new job is never easy. Check what new jobs we have in store for you on ABM PORTAL.
           </p>
 
           {/* Stats */}
-          <div className="flex flex-wrap justify-center md:justify-start gap-6">
+          <div className="flex flex-wrap justify-center md:justify-start gap-4 sm:gap-6">
             {stats.map((stat) => (
               <div key={stat.id} className="text-center md:text-left">
                 <span className="font-bold block text-2xl sm:text-3xl lg:text-4xl">
@@ -77,33 +70,28 @@ export default function Hero() {
         </div>
 
         {/* Right: Job Search Form */}
-        <div className="bg-white p-5 sm:p-6 lg:p-8 rounded-2xl shadow-xl w-full md:w-1/2 lg:w-1/3 relative z-10">
+        <div className="bg-white p-4 sm:p-6 lg:p-8 rounded-2xl shadow-xl w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/3 relative z-10">
           <h2 className="text-lg sm:text-xl lg:text-2xl font-bold mb-6 text-center md:text-left">
-            Grow Your Career With{" "}
-            <span className="text-green-600">ABM PORTAL</span>
+            Grow Your Career With <span className="text-green-600">ABM PORTAL</span>
           </h2>
 
           <Form layout="vertical" onFinish={handleSearch}>
             {/* Keywords */}
-            <Form.Item>
+            <Form.Item className="mb-4">
               <Input
                 placeholder="Search Job Keywords..."
                 value={filters.keywords}
-                onChange={(e) =>
-                  setFilters({ ...filters, keywords: e.target.value })
-                }
+                onChange={(e) => setFilters({ ...filters, keywords: e.target.value })}
               />
             </Form.Item>
 
             {/* Row 1 */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
               <Form.Item>
                 <Select
                   placeholder="Select Category"
                   value={filters.category || undefined}
-                  onChange={(value) =>
-                    setFilters({ ...filters, category: value })
-                  }
+                  onChange={(value) => setFilters({ ...filters, category: value })}
                   allowClear
                 >
                   {categories.map((c, i) => (
@@ -131,7 +119,7 @@ export default function Hero() {
             </div>
 
             {/* Row 2 */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
               <Form.Item>
                 <Select
                   placeholder="Select Level"
@@ -151,9 +139,7 @@ export default function Hero() {
                 <Select
                   placeholder="Experience"
                   value={filters.experience || undefined}
-                  onChange={(value) =>
-                    setFilters({ ...filters, experience: value })
-                  }
+                  onChange={(value) => setFilters({ ...filters, experience: value })}
                   allowClear
                 >
                   {experiences.map((exp, i) => (
@@ -166,7 +152,7 @@ export default function Hero() {
             </div>
 
             {/* Row 3 */}
-            <Form.Item>
+            <Form.Item className="mb-4">
               <Select
                 placeholder="Expected Salary"
                 value={filters.salary || undefined}
@@ -202,7 +188,7 @@ export default function Hero() {
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 1440 320"
           preserveAspectRatio="none"
-          className="w-full h-20 sm:h-28 md:h-36 lg:h-48"
+          className="w-full h-28 sm:h-32 md:h-36 lg:h-48"
         >
           <path
             fill="#ffffff"

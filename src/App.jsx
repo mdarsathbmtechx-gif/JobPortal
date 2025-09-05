@@ -8,12 +8,11 @@ import { Scrolltotop } from "./Scrolltotop";
 import RecruiterHome from "./modules/Recruiter/RecruiterHome";
 import RecruiterLayout from "./modules/Recruiter/RecruiterLayout/RecruiterLayout";  
 import PostJob from "./modules/Recruiter/Pages/PostJob";
-import JobList from "./modules/Recruiter/Pages/JobList";
-import Applicants from "./modules/Recruiter/Pages/Applicants";
 import Profile from "./modules/Homepages/Pages/Profile";
 import Companies from "./modules/Homepages/Pages/Companies";
-import LoginDashboard from "./modules/Homepages/Pages/LoginDashboard";
+import LoginDashboard from "./modules/Dashboard/LoginDashboard";
 import UserDashboard from "./modules/Dashboard/UserDashboard";
+import RecruiterDashboard from "./modules/Recruiter/Dashboard/RecruiterDashboard";  // ✅ Import
 
 function App() {
   return (
@@ -31,14 +30,17 @@ function App() {
           <Route path="/profile" element={<Profile/>}/>
         </Route>
 
-  {/* ---------- Dashboard (No Navbar) ---------- */}
-  <Route path="/user-dashboard" element={<UserDashboard />} />
+        {/* ---------- User Dashboard (No Navbar) ---------- */}
+        <Route path="/user-dashboard" element={<UserDashboard />} />
+
+        {/* ---------- Recruiter Dashboard (No Navbar) ---------- */}
+        <Route path="/recruiter-dashboard" element={<RecruiterDashboard />} />   {/* ✅ Add this */}
+
         {/* ---------- Recruiter Layout ---------- */}
         <Route element={<RecruiterLayout />}>
           <Route path="/recruiter-home" element={<RecruiterHome />} />
           <Route path="/recruiter/post-job" element={<PostJob />} />
-          <Route path="/recruiter/jobs" element={<JobList />} />
-          <Route path="/recruiter/applicants" element={<Applicants />} />
+          
         </Route>
       </Routes>
     </>

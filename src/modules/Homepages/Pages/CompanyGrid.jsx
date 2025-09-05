@@ -44,7 +44,7 @@ export default function CompanyGrid() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-8 py-12">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 overflow-x-hidden box-border">
       <h2 className="text-3xl font-bold text-center mb-2" data-aos="fade-down">
         Featured Companies
       </h2>
@@ -53,7 +53,7 @@ export default function CompanyGrid() {
       </p>
 
       {/* Grid Layout */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {companies.map((company, idx) => (
           <Card
             key={company.name + idx}
@@ -64,9 +64,10 @@ export default function CompanyGrid() {
                 src={company.logo || "/placeholder.png"}
                 loading="lazy"
                 className="h-48 w-full object-cover rounded-t-2xl"
+                style={{ maxWidth: "100%", display: "block" }}
               />
             }
-            className="rounded-2xl shadow-md"
+            className="rounded-2xl shadow-md flex flex-col justify-between"
             data-aos={getAnimation(idx)}
             data-aos-delay={idx * 100}
           >
@@ -90,15 +91,17 @@ export default function CompanyGrid() {
             />
 
             {/* Company Size */}
-            <div className="flex justify-between items-center mt-4 mb-3">
-              {company.size && <Tag color="blue">{company.size}</Tag>}
-            </div>
+            {company.size && (
+              <div className="flex justify-start mt-4 mb-3">
+                <Tag color="blue">{company.size}</Tag>
+              </div>
+            )}
 
-            {/* Follow / View Button */}
+            {/* Follow Button */}
             <Button
               type={followed[company.name] ? "default" : "primary"}
               block
-              className="!rounded-full"
+              className="!rounded-full mt-auto"
               onClick={() => handleFollow(company.name)}
               aria-label={`${followed[company.name] ? "Unfollow" : "Follow"} ${company.name}`}
             >

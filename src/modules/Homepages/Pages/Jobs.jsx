@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Card, Checkbox, Select, Button, Typography, Spin, message } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
+import { Card, Checkbox, Select, Typography, Spin, Button, Collapse } from "antd";
 import axios from "axios";
 import LoginModal from "../../Auth/LoginModal";
 import RegisterModal from "../../Auth/RegisterModal";
 
 const { Title, Text } = Typography;
+const { Panel } = Collapse;
 
 export default function Jobs() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -25,7 +25,9 @@ export default function Jobs() {
         const jobsRes = await axios.get("/Jobs.json");
         const categoriesRes = await axios.get("/Categories.json");
         setJobs(Array.isArray(jobsRes.data.jobs) ? jobsRes.data.jobs : []);
-        setCategories(Array.isArray(categoriesRes.data.topics) ? categoriesRes.data.topics : []);
+        setCategories(
+          Array.isArray(categoriesRes.data.topics) ? categoriesRes.data.topics : []
+        );
       } catch (error) {
         console.error("Error fetching data:", error);
         setJobs([]);
@@ -48,112 +50,62 @@ export default function Jobs() {
 
   const sponsoredJobs = filteredJobs.slice(0, 3);
 
-  const handleApply = (jobTitle) => {
-    message.success(`Applied for ${jobTitle}`);
-  };
-
   return (
-    <div className="min-h-screen bg-gray-100 text-gray-800 px-6 py-10 flex gap-6">
+    <div className="min-h-screen bg-gray-100 text-gray-800 px-4 sm:px-6 lg:px-10 py-10 flex flex-col lg:flex-row gap-6">
       {/* Left Filter Column */}
-      <div className="w-full md:w-1/4 h-[80vh] overflow-y-auto">
-        <div className="mt-18 bg-white/90 p-6 rounded-lg shadow-lg mb-6 transition duration-300 hover:shadow-xl">
-          <Title level={4} className="text-lg font-semibold mb-4 text-gray-900">Filter Jobs</Title>
-          <Button type="link" className="text-indigo-600 mb-4">Clear All</Button>
+      <div className="w-full lg:w-1/4">
+        {/* Collapse for mobile */}
+        <Collapse className="lg:hidden mb-4" defaultActiveKey={["1"]}>
+          <Panel header="Filter Jobs" key="1">
+            <Filters
+              qualification={qualification}
+              setQualification={setQualification}
+              jobType={jobType}
+              setJobType={setJobType}
+              salary={salary}
+              setSalary={setSalary}
+              experience={experience}
+              setExperience={setExperience}
+            />
+          </Panel>
+        </Collapse>
 
-          {/* Qualification Checkboxes */}
-          <div className="space-y-1 mb-4">
-            <Checkbox.Group value={qualification} onChange={setQualification} className="flex flex-col space-y-1">
-              {["Below 10th","10th","12th","Diploma/ITI","Graduate","Post Graduate"].map((q) => (
-                <Checkbox
-                  key={q}
-                  value={q}
-                  className="text-gray-700 transition duration-200 hover:text-indigo-600 cursor-pointer"
-                >
-                  {q}
-                </Checkbox>
-              ))}
-            </Checkbox.Group>
-          </div>
-
-          {/* Job Category */}
-          <div className="mb-4 transition duration-300 hover:shadow-sm p-2 rounded-md">
-            <Text strong className="block mb-2 text-gray-900">Job Category</Text>
-            <Select
-              placeholder="Select job type"
-              value={jobType}
-              onChange={setJobType}
-              className="w-full transition duration-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-            >
-              <Select.Option value="">All</Select.Option>
-              <Select.Option value="Full Time">Full Time</Select.Option>
-              <Select.Option value="Part Time">Part Time</Select.Option>
-            </Select>
-          </div>
-
-          {/* Salary */}
-          <div className="mb-4 transition duration-300 hover:shadow-sm p-2 rounded-md">
-            <Text strong className="block mb-2 text-gray-900">Salary</Text>
-            <Select
-              placeholder="Select salary range"
-              value={salary}
-              onChange={setSalary}
-              className="w-full transition duration-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-            >
-              <Select.Option value="">All</Select.Option>
-              <Select.Option value="10000-20000">₹10,000 - ₹20,000</Select.Option>
-              <Select.Option value="20000-30000">₹20,000 - ₹30,000</Select.Option>
-            </Select>
-          </div>
-
-          {/* Experience */}
-          <div className="transition duration-300 hover:shadow-sm p-2 rounded-md">
-            <Text strong className="block mb-2 text-gray-900">Experience</Text>
-            <Select
-              placeholder="Select experience"
-              value={experience}
-              onChange={setExperience}
-              className="w-full transition duration-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-            >
-              <Select.Option value="">All</Select.Option>
-              <Select.Option value="0-1">0-1 Year</Select.Option>
-              <Select.Option value="1-3">1-3 Years</Select.Option>
-            </Select>
-          </div>
+        {/* Always visible on lg+ */}
+        <div className="hidden lg:block bg-white p-6 rounded-lg shadow-lg mb-6 transition duration-300 hover:shadow-xl">
+          <Filters
+            qualification={qualification}
+            setQualification={setQualification}
+            jobType={jobType}
+            setJobType={setJobType}
+            salary={salary}
+            setSalary={setSalary}
+            experience={experience}
+            setExperience={setExperience}
+          />
         </div>
       </div>
 
       {/* Right Job Listings Column */}
-      <div className="w-full md:w-3/4 h-[80vh] overflow-y-auto flex flex-col gap-6 transition-all duration-500 ease-in-out">
+      <div className="w-full lg:w-3/4 flex flex-col gap-6">
         {/* Sponsored Jobs */}
-        <div className="mt-18 bg-indigo-50 p-6 rounded-lg shadow-md transition duration-500 ease-in-out">
-          <Title level={4} className="text-lg font-semibold mb-4 text-gray-900">Sponsored Jobs</Title>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {sponsoredJobs.map((job, index) => (
-              <Card
-                key={index}
-                hoverable
-                className="bg-white p-4 rounded-lg shadow-md text-center transform transition duration-300 hover:-translate-y-1 hover:shadow-2xl"
-              >
-                <img src={job.logo} alt={job.title} className="w-16 h-16 mx-auto mb-2 object-contain" />
-                <Title level={5} className="text-gray-900 font-semibold mb-1 transition duration-300 hover:text-indigo-600">{job.title}</Title>
-                <Text className="text-gray-700 block mb-1">{job.company}</Text>
-                <Text className="text-gray-700 block mb-1">{job.salary}</Text>
-                <Text className="text-gray-700 block mb-2">{job.location}</Text>
-                <Button
-                  onClick={() => handleApply(job.title)}
-                  className="bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white font-semibold transition duration-300 transform hover:scale-105"
-                >
-                  Apply
-                </Button>
-                <Button icon={<SearchOutlined />} className="text-indigo-600 transition duration-300 hover:text-indigo-700 ml-2">Chat</Button>
-              </Card>
-            ))}
+        {sponsoredJobs.length > 0 && (
+          <div className="bg-indigo-50 p-6 rounded-lg shadow-md">
+            <Title level={4} className="text-lg font-semibold mb-4 text-gray-900">
+              Sponsored Jobs
+            </Title>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              {sponsoredJobs.map((job, index) => (
+                <JobCard key={index} job={job} />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Job Listings */}
-        <div className="bg-white p-6 rounded-lg shadow-md flex-1 transition-all duration-500 ease-in-out">
-          <Title level={4} className="text-lg font-semibold mb-4 text-gray-900">Job Listing</Title>
+        <div className="bg-white p-6 rounded-lg shadow-md flex-1">
+          <Title level={4} className="text-lg font-semibold mb-4 text-gray-900">
+            Job Listing
+          </Title>
           {loading ? (
             <div className="text-center py-10">
               <Spin size="large" />
@@ -161,34 +113,99 @@ export default function Jobs() {
           ) : filteredJobs.length === 0 ? (
             <Text className="text-center text-gray-600 text-lg">No jobs found.</Text>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 transition-all duration-500 ease-in-out">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               {filteredJobs.map((job) => (
-                <Card
-                  key={job.id}
-                  hoverable
-                  className="bg-white p-4 rounded-lg shadow-md text-center transform transition duration-300 hover:-translate-y-1 hover:shadow-2xl"
-                >
-                  <img src={job.logo} alt={job.title} className="w-16 h-16 mx-auto mb-2 object-contain" />
-                  <Title level={5} className="text-gray-900 font-semibold mb-1 transition duration-300 hover:text-indigo-600">{job.title}</Title>
-                  <Text className="text-gray-700 block mb-1">{job.company}</Text>
-                  <Text className="text-gray-700 block mb-1">{job.salary}</Text>
-                  <Text className="text-gray-700 block mb-2">{job.location}</Text>
-                  <Button
-                    onClick={() => handleApply(job.title)}
-                    className="bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white font-semibold transition duration-300 transform hover:scale-105"
-                  >
-                    Apply
-                  </Button>
-                </Card>
+                <JobCard key={job.id} job={job} />
               ))}
             </div>
           )}
         </div>
       </div>
 
-      {/* Login & Register Modals */}
+      {/* Modals */}
       <LoginModal open={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
       <RegisterModal open={isRegisterOpen} onClose={() => setIsRegisterOpen(false)} />
     </div>
   );
 }
+
+// Job Card Component
+const JobCard = ({ job }) => (
+  <Card hoverable className="bg-white p-4 rounded-lg shadow-md text-center">
+    <img src={job.logo} alt={job.title} className="w-16 h-16 mx-auto mb-2 object-contain" />
+    <Title level={5} className="text-gray-900 font-semibold mb-1">
+      {job.title}
+    </Title>
+    <Text className="text-gray-700 block mb-1">{job.company}</Text>
+    <Text className="text-gray-700 block mb-1">{job.salary}</Text>
+    <Text className="text-gray-700 block mb-2">{job.location}</Text>
+    <div className="flex justify-center gap-2">
+      <Button className="text-green-600 border border-green-600 hover:bg-green-50">Chat</Button>
+      <Button className="text-blue-600 border border-blue-600 hover:bg-blue-50">Call HR</Button>
+    </div>
+  </Card>
+);
+
+// Filters Component
+const Filters = ({
+  qualification,
+  setQualification,
+  jobType,
+  setJobType,
+  salary,
+  setSalary,
+  experience,
+  setExperience,
+}) => (
+  <div className="space-y-4">
+    <div>
+      <Title level={4} className="text-gray-900 mb-2">
+        Qualification
+      </Title>
+      <Checkbox.Group
+        value={qualification}
+        onChange={setQualification}
+        className="flex flex-col space-y-1"
+      >
+        {["Below 10th", "10th", "12th", "Diploma/ITI", "Graduate", "Post Graduate"].map((q) => (
+          <Checkbox key={q} value={q} className="text-gray-700 cursor-pointer">
+            {q}
+          </Checkbox>
+        ))}
+      </Checkbox.Group>
+    </div>
+
+    <div>
+      <Text strong className="block mb-2 text-gray-900">
+        Job Type
+      </Text>
+      <Select placeholder="Select job type" value={jobType} onChange={setJobType} className="w-full">
+        <Select.Option value="">All</Select.Option>
+        <Select.Option value="Full Time">Full Time</Select.Option>
+        <Select.Option value="Part Time">Part Time</Select.Option>
+      </Select>
+    </div>
+
+    <div>
+      <Text strong className="block mb-2 text-gray-900">
+        Salary
+      </Text>
+      <Select placeholder="Select salary range" value={salary} onChange={setSalary} className="w-full">
+        <Select.Option value="">All</Select.Option>
+        <Select.Option value="10000-20000">₹10,000 - ₹20,000</Select.Option>
+        <Select.Option value="20000-30000">₹20,000 - ₹30,000</Select.Option>
+      </Select>
+    </div>
+
+    <div>
+      <Text strong className="block mb-2 text-gray-900">
+        Experience
+      </Text>
+      <Select placeholder="Select experience" value={experience} onChange={setExperience} className="w-full">
+        <Select.Option value="">All</Select.Option>
+        <Select.Option value="0-1">0-1 Year</Select.Option>
+        <Select.Option value="1-3">1-3 Years</Select.Option>
+      </Select>
+    </div>
+  </div>
+);
