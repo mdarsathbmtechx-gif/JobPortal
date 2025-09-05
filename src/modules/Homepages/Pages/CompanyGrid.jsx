@@ -25,7 +25,6 @@ export default function CompanyGrid() {
   const [followed, setFollowed] = useState({}); // Track follow state
 
   useEffect(() => {
-    // Fetch the JSON file from public folder
     fetch("/CompaniesGrid.json")
       .then((res) => res.json())
       .then((data) => setCompanies(data || []))
@@ -34,7 +33,6 @@ export default function CompanyGrid() {
     AOS.init({ duration: 800, once: true });
   }, []);
 
-  // Refresh animations whenever companies update
   useEffect(() => {
     AOS.refresh();
   }, [companies]);
@@ -44,7 +42,7 @@ export default function CompanyGrid() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 overflow-x-hidden box-border">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 box-border overflow-hidden">
       <h2 className="text-3xl font-bold text-center mb-2" data-aos="fade-down">
         Featured Companies
       </h2>
@@ -53,7 +51,7 @@ export default function CompanyGrid() {
       </p>
 
       {/* Grid Layout */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full">
         {companies.map((company, idx) => (
           <Card
             key={company.name + idx}
@@ -67,7 +65,7 @@ export default function CompanyGrid() {
                 style={{ maxWidth: "100%", display: "block" }}
               />
             }
-            className="rounded-2xl shadow-md flex flex-col justify-between"
+            className="rounded-2xl shadow-md flex flex-col justify-between w-full"
             data-aos={getAnimation(idx)}
             data-aos-delay={idx * 100}
           >

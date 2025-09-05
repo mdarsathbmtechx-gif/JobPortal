@@ -7,6 +7,7 @@ import "aos/dist/aos.css";
 
 const { Meta } = Card;
 
+// Badge colors
 const badgeColors = {
   Featured: "green",
   Urgent: "orange",
@@ -15,6 +16,7 @@ const badgeColors = {
   Internship: "red",
 };
 
+// Animations
 const animations = ["fade-right", "fade-up", "fade-left", "zoom-in", "flip-left"];
 const getAnimation = (idx) => animations[idx % animations.length];
 
@@ -38,7 +40,7 @@ export default function JobGrid() {
     badgeColors[badge] || `#${([...badge].reduce((acc, char) => acc + char.charCodeAt(0), 0) % 16777215).toString(16)}`;
 
   return (
-    <div className="pt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 overflow-x-hidden box-border">
+    <div className="pt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 box-border overflow-hidden">
       <h2 className="text-3xl font-bold text-center mb-2" data-aos="fade-down">
         Featured Jobs
       </h2>
@@ -51,7 +53,7 @@ export default function JobGrid() {
       ) : jobs.length === 0 ? (
         <p className="text-center text-gray-500">No jobs available at the moment.</p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full">
           {jobs.map((job, idx) => (
             <Card
               key={idx}
@@ -64,10 +66,11 @@ export default function JobGrid() {
                   style={{ maxWidth: "100%", display: "block" }}
                 />
               }
-              className="rounded-2xl shadow-md flex flex-col justify-between"
+              className="rounded-2xl shadow-md flex flex-col justify-between w-full"
               data-aos={getAnimation(idx)}
               data-aos-delay={idx * 100}
             >
+              {/* Badges */}
               <div className="flex flex-wrap gap-2 mb-3">
                 {job.badges?.map((badge, i) => (
                   <Tag key={i} color={getBadgeColor(badge)}>
@@ -76,16 +79,19 @@ export default function JobGrid() {
                 ))}
               </div>
 
+              {/* Job Info */}
               <Meta
                 title={<span className="font-semibold">{job.title || "Untitled Job"}</span>}
                 description={<span className="text-gray-500">{job.skills || "N/A"}</span>}
               />
 
+              {/* Salary & Openings */}
               <div className="flex justify-between items-center mt-4 mb-3">
                 <span className="font-bold text-gray-800">{job.salary || "N/A"}</span>
                 <Tag color="green">{job.openings ?? 0} Open</Tag>
               </div>
 
+              {/* Apply Button */}
               <Button type="primary" block className="!rounded-full mt-auto">
                 Apply Now
               </Button>
