@@ -13,9 +13,6 @@ export default function RecruiterNavbar() {
 
   const menuItems = [
     { key: "1", label: <Link to="/recruiter-home">Home</Link> },
-    { key: "2", label: <Link to="/recruiter-products">Products</Link> },
-    { key: "3", label: <Link to="/recruiter-pricing">Pricing</Link> },
-    { key: "4", label: <Link to="/recruiter-about">About</Link> },
   ];
 
   // Common button styles

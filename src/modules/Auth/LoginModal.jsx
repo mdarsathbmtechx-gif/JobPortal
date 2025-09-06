@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Modal, Form, Input, Button, Divider, Typography } from "antd";
-import { FaEnvelope, FaLock } from "react-icons/fa";
+import { FaEnvelope, FaPhone, FaLock } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 
 const { Title, Link } = Typography;
@@ -15,9 +15,12 @@ export default function LoginModal({ visible, onClose }) {
     setLoading(true);
     try {
       // 🔹 Fake login (no backend yet)
-      if (values.email && values.password) {
-        // save to localStorage so we know user is logged in
-        localStorage.setItem("user", JSON.stringify({ email: values.email }));
+      if ((values.emailOrPhone) && values.password) {
+        // Save login info in localStorage
+        localStorage.setItem(
+          "user",
+          JSON.stringify({ identifier: values.emailOrPhone })
+        );
 
         onClose(); // close modal
         navigate("/user-dashboard"); // redirect
@@ -34,11 +37,11 @@ export default function LoginModal({ visible, onClose }) {
 
   return (
     <Modal
-  open={visible}        // in AntD v5, use `open` instead of `visible`
-  onCancel={onClose}
-  destroyOnHidden       // replaces destroyOnClose
->
-
+      open={visible}   // in AntD v5, use `open` instead of `visible`
+      onCancel={onClose}
+      destroyOnClose
+      footer={null}
+    >
       <div className="flex flex-col md:flex-row">
         {/* Left Info Section */}
         <div className="w-full md:w-1/3 bg-gray-50 p-6 flex flex-col justify-center border-r">
@@ -58,11 +61,14 @@ export default function LoginModal({ visible, onClose }) {
 
           <Form layout="vertical" onFinish={handleSubmit} className="space-y-3">
             <Form.Item
-              label="Email ID / Username"
-              name="email"
-              rules={[{ required: true, message: "Please enter your email/username" }]}
+              label="Email or Phone Number"
+              name="emailOrPhone"
+              rules={[{ required: true, message: "Please enter your email or phone number" }]}
             >
-              <Input prefix={<FaEnvelope className="text-gray-400" />} placeholder="Enter your Email / Username" />
+              <Input
+                prefix={<FaEnvelope className="text-gray-400" />}
+                placeholder="Enter your Email or Phone Number"
+              />
             </Form.Item>
 
             <Form.Item
@@ -70,7 +76,10 @@ export default function LoginModal({ visible, onClose }) {
               name="password"
               rules={[{ required: true, message: "Please enter your password" }]}
             >
-              <Input.Password prefix={<FaLock className="text-gray-400" />} placeholder="Enter your password" />
+              <Input.Password
+                prefix={<FaLock className="text-gray-400" />}
+                placeholder="Enter your password"
+              />
             </Form.Item>
 
             <div className="flex justify-end mb-2">

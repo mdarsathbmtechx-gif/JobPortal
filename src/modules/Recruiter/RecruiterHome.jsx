@@ -100,70 +100,60 @@ export default function RecruiterHome() {
               size="large"
               items={[
                 {
-                  key: "sales",
-                  label: "Sales Enquiry",
-                  children: <div className="p-4 text-gray-700"> {/* Sales enquiry form can go here */} </div>,
-                },
-                {
-                  key: "register",
-                  label: "Register",
-                  children: (
-                    <div className="flex flex-col gap-4 p-2">
-                      {[
-                        { label: "Full Name", name: "fullName", type: "text" },
-                        { label: "Email", name: "email", type: "email" },
-                        { label: "Mobile Number", name: "mobile", type: "text" },
-                        { label: "Password", name: "password", type: "password" },
-                        { label: "Confirm Password", name: "confirmPassword", type: "password" },
-                      ].map((field) => (
-                        <div key={field.name}>
-                          <label className="text-gray-600 text-sm font-medium mb-1 block">{field.label}</label>
-                          <Input
-                            type={field.type}
-                            name={field.name}
-                            placeholder={`Enter your ${field.label.toLowerCase()}`}
-                            value={formData[field.name]}
-                            onChange={handleChange}
-                            className="rounded-md"
-                            iconRender={
-                              field.type === "password"
-                                ? (visible) => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)
-                                : undefined
-                            }
-                          />
-                        </div>
-                      ))}
+  key: "register",
+  label: "Register",
+  children: (
+    <div className="flex flex-col gap-4 p-2">
+      {[
+        { label: "Company Name", name: "companyName", type: "text" },
+        { label: "Phone Number", name: "phone", type: "text" },
+        { label: "GST Number", name: "gst", type: "text" },
+        { label: "Address", name: "address", type: "text" },
+      ].map((field) => (
+        <div key={field.name}>
+          <label className="text-gray-600 text-sm font-medium mb-1 block">{field.label}</label>
+          <Input
+            type={field.type}
+            name={field.name}
+            placeholder={`Enter your ${field.label.toLowerCase()}`}
+            value={formData[field.name]}
+            onChange={handleChange}
+            className="rounded-md"
+          />
+        </div>
+      ))}
 
-                      <div className="flex items-center mb-4">
-                        <input
-                          type="checkbox"
-                          name="terms"
-                          id="terms"
-                          checked={formData.terms}
-                          onChange={handleChange}
-                          className="mr-2"
-                        />
-                        <label htmlFor="terms" className="text-gray-600 text-sm">
-                          I agree to the{" "}
-                          <span className="text-blue-500 underline cursor-pointer">Terms & Conditions</span>
-                        </label>
-                      </div>
+      <div className="flex items-center mb-4">
+        <input
+          type="checkbox"
+          name="terms"
+          id="terms"
+          checked={formData.terms}
+          onChange={handleChange}
+          className="mr-2"
+        />
+        <label htmlFor="terms" className="text-gray-600 text-sm">
+          I agree to the{" "}
+          <span className="text-blue-500 underline cursor-pointer">Terms & Conditions</span>
+        </label>
+      </div>
 
-                      <Button
-                        type="primary"
-                        className="w-full bg-green-600 hover:bg-green-700 text-white"
-                        onClick={handleSubmit}
-                      >
-                        Register
-                      </Button>
+      <Button
+        type="primary"
+        className="w-full bg-green-600 hover:bg-green-700 text-white"
+        onClick={handleSubmit}
+      >
+        Register
+      </Button>
 
-                      <Text className="block mt-4 text-center text-gray-500 text-sm">
-                        Already have an account?{" "}
-                        <span className="text-blue-500 underline cursor-pointer">Log in</span>
-                      </Text>
-                    </div>
-                  ),
-                },
+      <Text className="block mt-4 text-center text-gray-500 text-sm">
+        Already have an account?{" "}
+        <span className="text-blue-500 underline cursor-pointer">Log in</span>
+      </Text>
+    </div>
+  ),
+}
+
               ]}
             />
           </div>
