@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Card, Button, Typography, Row, Col, Input, message, Tabs } from "antd";
 import { FaUserTie, FaUsers, FaSearch } from "react-icons/fa";
-import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
 import RecruiterNavbar from "./RecruiterLayout/RecruiterNavbar";
 
 const { Title, Text } = Typography;
@@ -10,13 +9,17 @@ export default function RecruiterHome() {
   const [activeTab, setActiveTab] = useState("register");
   const [formVisible, setFormVisible] = useState(false);
   const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    mobile: "",
+    companyName: "",
+    phone: "",
+    gst: "",
     password: "",
     confirmPassword: "",
+    otp: "",
     terms: false,
   });
+
+  const [otpSent, setOtpSent] = useState(false);
+  const [generatedOtp, setGeneratedOtp] = useState(null);
 
   useEffect(() => {
     const timer = setTimeout(() => setFormVisible(true), 300);
@@ -31,10 +34,21 @@ export default function RecruiterHome() {
     }));
   };
 
-  const handleSubmit = () => {
-    const { fullName, email, mobile, password, confirmPassword, terms } = formData;
+  const handleSendOtp = () => {
+    if (!formData.phone) {
+      message.error("Please enter phone number first");
+      return;
+    }
+    const otp = Math.floor(100000 + Math.random() * 900000); // 6-digit OTP
+    setGeneratedOtp(otp);
+    setOtpSent(true);
+    message.success(`OTP sent! (For demo: ${otp})`);
+  };
 
-    if (!fullName || !email || !mobile || !password || !confirmPassword) {
+  const handleSubmit = () => {
+    const { companyName, phone, gst, password, confirmPassword, otp, terms } = formData;
+
+    if (!companyName || !phone || !gst || !password || !confirmPassword) {
       message.error("Please fill in all fields");
       return;
     }
@@ -46,18 +60,29 @@ export default function RecruiterHome() {
       message.error("Passwords do not match");
       return;
     }
+    if (!otpSent || !otp) {
+      message.error("Please verify your phone number with OTP");
+      return;
+    }
+    if (parseInt(otp) !== generatedOtp) {
+      message.error("Invalid OTP. Please try again.");
+      return;
+    }
 
     message.success("Registered successfully!");
     console.log("Form Data:", formData);
 
     setFormData({
-      fullName: "",
-      email: "",
-      mobile: "",
+      companyName: "",
+      phone: "",
+      gst: "",
       password: "",
       confirmPassword: "",
+      otp: "",
       terms: false,
     });
+    setOtpSent(false);
+    setGeneratedOtp(null);
   };
 
   return (
@@ -88,7 +113,7 @@ export default function RecruiterHome() {
             </Button>
           </div>
 
-          {/* Register / Auth Form */}
+          {/* Register Form */}
           <div
             className={`md:w-96 bg-white text-gray-800 p-6 rounded-xl shadow-xl transform transition-transform duration-700 ease-out
               ${formVisible ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"}`}
@@ -100,97 +125,136 @@ export default function RecruiterHome() {
               size="large"
               items={[
                 {
-  key: "register",
-  label: "Register",
-  children: (
-    <div className="flex flex-col gap-4 p-2">
-      {[
-        { label: "Company Name", name: "companyName", type: "text" },
-        { label: "Phone Number", name: "phone", type: "text" },
-        { label: "GST Number", name: "gst", type: "text" },
-        { label: "Address", name: "address", type: "text" },
-      ].map((field) => (
-        <div key={field.name}>
-          <label className="text-gray-600 text-sm font-medium mb-1 block">{field.label}</label>
-          <Input
-            type={field.type}
-            name={field.name}
-            placeholder={`Enter your ${field.label.toLowerCase()}`}
-            value={formData[field.name]}
-            onChange={handleChange}
-            className="rounded-md"
-          />
-        </div>
-      ))}
+                  key: "register",
+                  label: "Register",
+                  children: (
+                    <div className="flex flex-col gap-4 p-2">
+                      {/* Company Name */}
+                      <div>
+                        <label className="text-gray-600 text-sm font-medium mb-1 block">
+                          Company Name
+                        </label>
+                        <Input
+                          type="text"
+                          name="companyName"
+                          placeholder="Enter your company name"
+                          value={formData.companyName}
+                          onChange={handleChange}
+                        />
+                      </div>
 
-      <div className="flex items-center mb-4">
-        <input
-          type="checkbox"
-          name="terms"
-          id="terms"
-          checked={formData.terms}
-          onChange={handleChange}
-          className="mr-2"
-        />
-        <label htmlFor="terms" className="text-gray-600 text-sm">
-          I agree to the{" "}
-          <span className="text-blue-500 underline cursor-pointer">Terms & Conditions</span>
-        </label>
-      </div>
+                      {/* Phone + OTP */}
+                      <div>
+                        <label className="text-gray-600 text-sm font-medium mb-1 block">
+                          Phone Number
+                        </label>
+                        <div className="flex gap-2">
+                          <Input
+                            type="text"
+                            name="phone"
+                            placeholder="Enter phone number"
+                            value={formData.phone}
+                            onChange={handleChange}
+                          />
+                          <Button type="primary" onClick={handleSendOtp}>
+                            {otpSent ? "Resend OTP" : "Send OTP"}
+                          </Button>
+                        </div>
+                      </div>
 
-      <Button
-        type="primary"
-        className="w-full bg-green-600 hover:bg-green-700 text-white"
-        onClick={handleSubmit}
-      >
-        Register
-      </Button>
+                      {/* OTP input (only show after Send OTP) */}
+                      {otpSent && (
+                        <div>
+                          <label className="text-gray-600 text-sm font-medium mb-1 block">
+                            Enter OTP
+                          </label>
+                          <Input
+                            type="text"
+                            name="otp"
+                            placeholder="Enter OTP"
+                            value={formData.otp}
+                            onChange={handleChange}
+                          />
+                        </div>
+                      )}
 
-      <Text className="block mt-4 text-center text-gray-500 text-sm">
-        Already have an account?{" "}
-        <span className="text-blue-500 underline cursor-pointer">Log in</span>
-      </Text>
-    </div>
-  ),
-}
+                      {/* GST */}
+                      <div>
+                        <label className="text-gray-600 text-sm font-medium mb-1 block">
+                          GST Number
+                        </label>
+                        <Input
+                          type="text"
+                          name="gst"
+                          placeholder="Enter GST number"
+                          value={formData.gst}
+                          onChange={handleChange}
+                        />
+                      </div>
 
+                      {/* Password */}
+                      <div>
+                        <label className="text-gray-600 text-sm font-medium mb-1 block">
+                          Password
+                        </label>
+                        <Input.Password
+                          name="password"
+                          placeholder="Enter password"
+                          value={formData.password}
+                          onChange={handleChange}
+                        />
+                      </div>
+
+                      {/* Confirm Password */}
+                      <div>
+                        <label className="text-gray-600 text-sm font-medium mb-1 block">
+                          Confirm Password
+                        </label>
+                        <Input.Password
+                          name="confirmPassword"
+                          placeholder="Confirm password"
+                          value={formData.confirmPassword}
+                          onChange={handleChange}
+                        />
+                      </div>
+
+                      {/* Terms */}
+                      <div className="flex items-center mb-4">
+                        <input
+                          type="checkbox"
+                          name="terms"
+                          id="terms"
+                          checked={formData.terms}
+                          onChange={handleChange}
+                          className="mr-2"
+                        />
+                        <label htmlFor="terms" className="text-gray-600 text-sm">
+                          I agree to the{" "}
+                          <span className="text-blue-500 underline cursor-pointer">
+                            Terms & Conditions
+                          </span>
+                        </label>
+                      </div>
+
+                      <Button
+                        type="primary"
+                        className="w-full bg-green-600 hover:bg-green-700 text-white"
+                        onClick={handleSubmit}
+                      >
+                        Register
+                      </Button>
+
+                      <Text className="block mt-4 text-center text-gray-500 text-sm">
+                        Already have an account?{" "}
+                        <span className="text-blue-500 underline cursor-pointer">Log in</span>
+                      </Text>
+                    </div>
+                  ),
+                },
               ]}
             />
           </div>
         </div>
-      </section>
-
-      {/* Quick Stats */}
-      <section className="py-20 px-6 max-w-6xl mx-auto">
-        <Row gutter={[24, 24]}>
-          <Col xs={24} sm={12} md={8}>
-            <Card className="flex items-center gap-4 p-8 rounded-xl shadow-lg hover:shadow-2xl transition-shadow">
-              <FaUsers className="text-5xl text-green-500" />
-              <div>
-                <Text className="text-gray-500">Registered Jobseekers</Text>
-                <Title level={3}>10 Crore+</Title>
-              </div>
-            </Card>
-          </Col>
-          <Col xs={24} sm={12} md={8}>
-            <Card className="flex items-center gap-4 p-8 rounded-xl shadow-lg hover:shadow-2xl transition-shadow">
-              <FaUserTie className="text-5xl text-blue-500" />
-              <div>
-                <Text className="text-gray-500">AI-Powered Hiring</Text>
-                <Title level={3}>Advanced Tools</Title>
-              </div>
-            </Card>
-          </Col>
-          <Col xs={24} sm={12} md={8}>
-            <Card className="flex items-center gap-4 p-8 rounded-xl shadow-lg hover:shadow-2xl transition-shadow">
-              <FaSearch className="text-5xl text-yellow-500" />
-              <div>
-                <Text className="text-gray-500">Smart Candidate Search</Text>
-                <Title level={3}>Instant Matches</Title>
-              </div>
-            </Card>
-          </Col>
-        </Row>
       </section>
     </div>
   );

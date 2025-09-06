@@ -1,6 +1,6 @@
 // src/modules/Homepages/Pages/Companies.jsx
 import React, { useState, useEffect } from "react";
-import { Card, Checkbox, Select, Button, Typography, Spin, message } from "antd";
+import { Card, Checkbox, Select, Button, Typography, Spin } from "antd";
 import axios from "axios";
 import LoginModal from "../../Auth/LoginModal";
 import RegisterModal from "../../Auth/RegisterModal";
@@ -24,10 +24,14 @@ export default function Companies() {
         const companiesRes = await axios.get("/Companies.json");
         const industriesRes = await axios.get("/Industries.json");
         setCompanies(
-          Array.isArray(companiesRes.data.companies) ? companiesRes.data.companies : []
+          Array.isArray(companiesRes.data.companies)
+            ? companiesRes.data.companies
+            : []
         );
         setIndustries(
-          Array.isArray(industriesRes.data.industries) ? industriesRes.data.industries : []
+          Array.isArray(industriesRes.data.industries)
+            ? industriesRes.data.industries
+            : []
         );
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -50,12 +54,8 @@ export default function Companies() {
 
   const sponsoredCompanies = filteredCompanies.slice(0, 3);
 
-  const handleFollow = (companyName) => {
-    message.success(`Followed ${companyName}`);
-  };
-
   return (
-    <div className="min-h-screen bg-gray-100 text-gray-800 px-6 py-10 flex gap-6">
+    <div className="min-h-screen bg-gray-100 text-gray-800 px-6 py-10 flex flex-col md:flex-row gap-6">
       {/* Left Filter Column */}
       <div className="w-full md:w-1/4 h-[80vh] overflow-y-auto">
         <div className="mt-18 bg-white/90 p-6 rounded-lg shadow-lg mb-6 transition duration-300 hover:shadow-xl">
@@ -129,39 +129,18 @@ export default function Companies() {
       {/* Right Companies Column */}
       <div className="w-full md:w-3/4 h-[80vh] overflow-y-auto flex flex-col gap-6">
         {/* Sponsored Companies */}
-        <div className="mt-18 bg-indigo-50 p-6 rounded-lg shadow-md">
-          <Title level={4} className="text-lg font-semibold mb-4 text-gray-900">
-            Sponsored Companies
-          </Title>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {sponsoredCompanies.map((company, index) => (
-              <Card
-                key={index}
-                hoverable
-                className="bg-white p-4 rounded-lg shadow-md text-center"
-              >
-                <img
-                  src={company.logo}
-                  alt={company.name}
-                  className="w-16 h-16 mx-auto mb-2 object-contain"
-                />
-                <Title level={5} className="text-gray-900 font-semibold mb-1">
-                  {company.name}
-                </Title>
-                <Text className="text-gray-700 block mb-1">{company.industry}</Text>
-                <Text className="text-gray-700 block mb-1">{company.location}</Text>
-                <Text className="text-gray-700 block mb-2">{company.size}</Text>
-                {/* ✅ Keep only Follow button */}
-                <Button
-                  onClick={() => handleFollow(company.name)}
-                  className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold"
-                >
-                  Follow
-                </Button>
-              </Card>
-            ))}
+        {sponsoredCompanies.length > 0 && (
+          <div className="bg-indigo-50 p-6 rounded-lg shadow-md">
+            <Title level={4} className="text-lg font-semibold mb-4 text-gray-900">
+              Sponsored Companies
+            </Title>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              {sponsoredCompanies.map((company, index) => (
+                <CompanyCard key={index} company={company} />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Company Listings */}
         <div className="bg-white p-6 rounded-lg shadow-md flex-1">
@@ -179,30 +158,7 @@ export default function Companies() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               {filteredCompanies.map((company) => (
-                <Card
-                  key={company.id}
-                  hoverable
-                  className="bg-white p-4 rounded-lg shadow-md text-center"
-                >
-                  <img
-                    src={company.logo}
-                    alt={company.name}
-                    className="w-16 h-16 mx-auto mb-2 object-contain"
-                  />
-                  <Title level={5} className="text-gray-900 font-semibold mb-1">
-                    {company.name}
-                  </Title>
-                  <Text className="text-gray-700 block mb-1">{company.industry}</Text>
-                  <Text className="text-gray-700 block mb-1">{company.location}</Text>
-                  <Text className="text-gray-700 block mb-2">{company.size}</Text>
-                  {/* ✅ Keep only Follow button */}
-                  <Button
-                    onClick={() => handleFollow(company.name)}
-                    className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold"
-                  >
-                    Follow
-                  </Button>
-                </Card>
+                <CompanyCard key={company.id} company={company} />
               ))}
             </div>
           )}
@@ -215,3 +171,33 @@ export default function Companies() {
     </div>
   );
 }
+
+// Company Card Component
+const CompanyCard = ({ company }) => (
+  <Card
+    hoverable
+    className="bg-white p-4 rounded-lg shadow-md text-center relative transition hover:shadow-lg"
+  >
+    <img
+      src={company.logo}
+      alt={company.name}
+      className="w-16 h-16 mx-auto mb-2 object-contain"
+    />
+    <Title level={5} className="text-gray-900 font-semibold mb-1">
+      {company.name}
+    </Title>
+    <Text className="text-gray-700 block mb-1">{company.industry}</Text>
+    <Text className="text-gray-700 block mb-1">{company.location}</Text>
+    <Text className="text-gray-700 block mb-2">{company.size}</Text>
+
+    {/* Chat & Call HR buttons */}
+    <div className="flex justify-center gap-2 mt-2">
+      <Button size="small" className="text-green-600 border border-green-600">
+        Chat
+      </Button>
+      <Button size="small" className="text-blue-600 border border-blue-600">
+        Call HR
+      </Button>
+    </div>
+  </Card>
+);

@@ -13,6 +13,8 @@ import Companies from "./modules/Homepages/Pages/Companies";
 import LoginDashboard from "./modules/Dashboard/LoginDashboard";
 import UserDashboard from "./modules/Dashboard/UserDashboard";
 import RecruiterDashboard from "./modules/Recruiter/Dashboard/RecruiterDashboard";  // ✅ Import
+import RecruiterProfile from "./modules/Recruiter/RecruiterProfile";
+
 
 function App() {
   return (
@@ -33,6 +35,7 @@ function App() {
         {/* ---------- User Dashboard (No Navbar) ---------- */}
         <Route path="/user-dashboard" element={<UserDashboard />} />
 
+
         {/* ---------- Recruiter Dashboard (No Navbar) ---------- */}
         <Route path="/recruiter-dashboard" element={<RecruiterDashboard />} />   {/* ✅ Add this */}
 
@@ -40,6 +43,7 @@ function App() {
         <Route element={<RecruiterLayout />}>
           <Route path="/recruiter-home" element={<RecruiterHome />} />
           <Route path="/recruiter/post-job" element={<PostJob />} />
+          <Route path="/recruiter/profile" element={<RecruiterProfile />} />
           
         </Route>
       </Routes>

@@ -4,15 +4,16 @@ import {
   Checkbox,
   Select,
   Typography,
-  Spin,
   Button,
   Collapse,
   Input,
   Tag,
   Skeleton,
 } from "antd";
-import axios from "axios";
 import { SearchOutlined } from "@ant-design/icons";
+import axios from "axios";
+import AOS from "aos";
+import "aos/dist/aos.css";
 import LoginModal from "../../Auth/LoginModal";
 import RegisterModal from "../../Auth/RegisterModal";
 
@@ -30,6 +31,14 @@ export default function Jobs() {
   const [salary, setSalary] = useState("");
   const [experience, setExperience] = useState("");
   const [loading, setLoading] = useState(true);
+
+  // Pagination state
+  const [visibleCount, setVisibleCount] = useState(6);
+  const increment = 6;
+
+  useEffect(() => {
+    AOS.init({ duration: 800, once: true });
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -66,8 +75,8 @@ export default function Jobs() {
   const sponsoredJobs = filteredJobs.slice(0, 3);
 
   return (
-    <div className="min-h-screen bg-gray-50 px-4 sm:px-6 lg:px-10 py-10 flex flex-col lg:flex-row gap-6">
-      {/* Left Filter Column */}
+    <div className="mt-12 min-h-screen bg-gray-50 px-4 sm:px-6 lg:px-10 py-10 flex flex-col lg:flex-row gap-6">
+      {/* Left Filters Column */}
       <div className="w-full lg:w-1/4 lg:sticky lg:top-6 h-fit">
         {/* Collapse for mobile */}
         <Collapse className="lg:hidden mb-4 rounded-lg bg-white shadow">
@@ -132,6 +141,7 @@ export default function Jobs() {
           <Title level={4} className="font-semibold mb-4 text-gray-900">
             Job Listings
           </Title>
+
           {loading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               {[1, 2, 3, 4, 5, 6].map((i) => (
@@ -155,11 +165,25 @@ export default function Jobs() {
               </Button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-              {filteredJobs.map((job) => (
-                <JobCard key={job.id} job={job} />
-              ))}
-            </div>
+            <>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {filteredJobs.slice(0, visibleCount).map((job) => (
+                  <JobCard key={job.id} job={job} />
+                ))}
+              </div>
+
+              {/* Load More Button */}
+              {visibleCount < filteredJobs.length && (
+                <div className="flex justify-center mt-6">
+                  <Button
+                    type="primary"
+                    onClick={() => setVisibleCount((prev) => prev + increment)}
+                  >
+                    Load More
+                  </Button>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>
@@ -179,6 +203,8 @@ const JobCard = ({ job, sponsored }) => (
   <Card
     hoverable
     className="bg-white rounded-xl shadow-sm hover:shadow-lg transition p-4 text-center relative"
+    data-aos="fade-up"
+    data-aos-delay={job.id * 50}
   >
     {sponsored && (
       <Tag color="gold" className="absolute top-2 right-2">
@@ -210,7 +236,6 @@ const JobCard = ({ job, sponsored }) => (
   </Card>
 );
 
-
 // Filters Component
 const Filters = ({
   qualification,
@@ -232,18 +257,13 @@ const Filters = ({
         onChange={setQualification}
         className="flex flex-col space-y-1"
       >
-        {[
-          "Below 10th",
-          "10th",
-          "12th",
-          "Diploma/ITI",
-          "Graduate",
-          "Post Graduate",
-        ].map((q) => (
-          <Checkbox key={q} value={q} className="text-gray-700 cursor-pointer">
-            {q}
-          </Checkbox>
-        ))}
+        {["Below 10th", "10th", "12th", "Diploma/ITI", "Graduate", "Post Graduate"].map(
+          (q) => (
+            <Checkbox key={q} value={q} className="text-gray-700 cursor-pointer">
+              {q}
+            </Checkbox>
+          )
+        )}
       </Checkbox.Group>
     </div>
 

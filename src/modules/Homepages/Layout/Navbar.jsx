@@ -31,6 +31,12 @@ export default function Navbar() {
     };
   }, []);
 
+  const navLinks = [
+    { name: "Home", path: "/" },
+    { name: "Jobs", path: "/jobs" },
+    { name: "Companies", path: "/companies" },
+  ];
+
   return (
     <>
       <nav
@@ -58,30 +64,17 @@ export default function Navbar() {
 
         {/* Desktop Links */}
         <div className="hidden lg:flex gap-8 font-medium">
-          <Link
-            to="/"
-            className={`transition-colors duration-300 ${
-              scrolled ? "text-green-800" : "text-green"
-            }`}
-          >
-            Home
-          </Link>
-          <Link
-            to="/jobs"
-            className={`transition-colors duration-300 ${
-              scrolled ? "text-green-800" : "text-green"
-            }`}
-          >
-            Jobs
-          </Link>
-          <Link
-            to="/companies"
-            className={`transition-colors duration-300 ${
-              scrolled ? "text-green-800" : "text-green"
-            }`}
-          >
-            Companies
-          </Link>
+          {navLinks.map((link) => (
+            <Link
+              key={link.name}
+              to={link.path}
+              className={`transition-colors duration-300 ${
+                scrolled ? "text-green-800" : "text-green"
+              }`}
+            >
+              {link.name}
+            </Link>
+          ))}
         </div>
 
         {/* Desktop Buttons */}
@@ -119,59 +112,70 @@ export default function Navbar() {
 
       {/* Mobile Drawer */}
       <Drawer
-        title={
-          <div className="flex items-center justify-between">
-            <span className="font-bold text-lg">Menu</span>
-            <FaTimes
-              className="cursor-pointer text-lg"
-              onClick={() => setDrawerVisible(false)}
-            />
-          </div>
-        }
+        title={null}
         placement="right"
         onClose={() => setDrawerVisible(false)}
         open={drawerVisible}
+        width={windowWidth >= 768 ? "50%" : "100%"} // Half width on md+, full on sm
+        bodyStyle={{ padding: 0 }}
+        closable={false}
       >
-        <div className="flex flex-col gap-4 w-full">
-          <Link to="/" onClick={() => setDrawerVisible(false)}>
-            Home
-          </Link>
-          <Link to="/jobs" onClick={() => setDrawerVisible(false)}>
-            Jobs
-          </Link>
-          <Link to="/companies" onClick={() => setDrawerVisible(false)}>
-            Companies
-          </Link>
+        <div className="h-screen w-full bg-white flex flex-col p-6">
+          {/* Header */}
+          <div className="flex items-center justify-between mb-6">
+            <span className="font-bold text-lg">Menu</span>
+            <FaTimes
+              className="cursor-pointer text-2xl"
+              onClick={() => setDrawerVisible(false)}
+            />
+          </div>
 
-          <Button
-            type="primary"
-            onClick={() => {
-              setIsLoginOpen(true);
-              setDrawerVisible(false);
-            }}
-            className="!text-gray-700 hover:!text-green-700 font-medium text-left w-full"
-          >
-            Login
-          </Button>
+          {/* Links */}
+          <div className="flex flex-col gap-4 text-lg">
+            {navLinks.map((link) => (
+              <Link
+                key={link.name}
+                to={link.path}
+                onClick={() => setDrawerVisible(false)}
+                className="text-gray-700 hover:text-green-700 font-medium transition"
+              >
+                {link.name}
+              </Link>
+            ))}
 
-          <Button
-            type="primary"
-            onClick={() => {
-              setIsRegisterOpen(true);
-              setDrawerVisible(false);
-            }}
-            className="!bg-green-700 hover:!bg-green-800 !border-none w-full"
-          >
-            Register
-          </Button>
+            {/* Login Button */}
+            <Button
+              type="primary"
+              onClick={() => {
+                setIsLoginOpen(true);
+                setDrawerVisible(false);
+              }}
+              className="w-full text-left mt-4 bg-black text-white relative overflow-hidden rounded-xl shadow-md transition-all duration-500 ease-in-out hover:scale-105 hover:shadow-lg before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-gradient-to-r before:from-[#009b49] before:to-[rgb(105,184,141)] before:transition-all before:duration-500 before:ease-in-out before:z-[-1] before:rounded-xl hover:before:left-0"
+            >
+              Login
+            </Button>
 
-          <Link
-            to="/recruiter-home"
-            className="font-semibold text-gray-700 hover:text-green-700 mt-4 block"
-            onClick={() => setDrawerVisible(false)}
-          >
-            Recruiter
-          </Link>
+            {/* Sign Up Button */}
+            <Button
+              type="primary"
+              onClick={() => {
+                setIsRegisterOpen(true);
+                setDrawerVisible(false);
+              }}
+              className="w-full mt-2 bg-black text-white relative overflow-hidden rounded-xl shadow-md transition-all duration-500 ease-in-out hover:scale-105 hover:shadow-lg before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-gradient-to-r before:from-[#009b49] before:to-[rgb(105,184,141)] before:transition-all before:duration-500 before:ease-in-out before:z-[-1] before:rounded-xl hover:before:left-0"
+            >
+              Sign Up
+            </Button>
+
+            {/* Recruiter */}
+            <Link
+              to="/recruiter-home"
+              onClick={() => setDrawerVisible(false)}
+              className="mt-4 font-semibold text-gray-700 hover:text-green-700"
+            >
+              Recruiter
+            </Link>
+          </div>
         </div>
       </Drawer>
 
@@ -184,7 +188,6 @@ export default function Navbar() {
           navigate("/dashboard");
         }}
       />
-
       <RegisterModal
         visible={isRegisterOpen}
         onClose={() => setIsRegisterOpen(false)}

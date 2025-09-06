@@ -14,12 +14,6 @@ const badgeColors = {
   Remote: "blue",
 };
 
-// Function to pick animation based on index
-const getAnimation = (idx) => {
-  const animations = ["fade-right", "fade-up", "fade-left"];
-  return animations[idx % animations.length];
-};
-
 export default function CompanyGrid() {
   const [companies, setCompanies] = useState([]);
   const [followed, setFollowed] = useState({}); // Track follow state
@@ -43,15 +37,15 @@ export default function CompanyGrid() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 box-border overflow-hidden">
-      <h2 className="text-3xl font-bold text-center mb-2" data-aos="fade-down">
+      <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-2" data-aos="fade-down">
         Featured Companies
       </h2>
-      <p className="text-center text-gray-600 mb-10" data-aos="fade-up">
+      <p className="text-center text-gray-600 mb-10 text-sm sm:text-base" data-aos="fade-up">
         Explore top companies and discover your next opportunity.
       </p>
 
       {/* Grid Layout */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 w-full">
         {companies.map((company, idx) => (
           <Card
             key={company.name + idx}
@@ -61,18 +55,18 @@ export default function CompanyGrid() {
                 alt={company.name}
                 src={company.logo || "/placeholder.png"}
                 loading="lazy"
-                className="h-48 w-full object-cover rounded-t-2xl"
+                className="h-40 sm:h-48 w-full object-cover rounded-t-2xl"
                 style={{ maxWidth: "100%", display: "block" }}
               />
             }
             className="rounded-2xl shadow-md flex flex-col justify-between w-full"
-            data-aos={getAnimation(idx)}
+            data-aos="fade-up"
             data-aos-delay={idx * 100}
           >
             {/* Tags / badges */}
-            <div className="flex flex-wrap gap-2 mb-3">
+            <div className="flex flex-wrap gap-1 sm:gap-2 mb-2 sm:mb-3">
               {company.tags?.map((tag, i) => (
-                <Tag key={i} color={badgeColors[tag] || "default"}>
+                <Tag key={i} color={badgeColors[tag] || "default"} className="text-xs sm:text-sm">
                   {tag}
                 </Tag>
               ))}
@@ -80,9 +74,9 @@ export default function CompanyGrid() {
 
             {/* Company Info */}
             <Meta
-              title={<span className="font-semibold">{company.name}</span>}
+              title={<span className="font-semibold text-sm sm:text-base">{company.name}</span>}
               description={
-                <span className="text-gray-500">
+                <span className="text-gray-500 text-xs sm:text-sm">
                   {company.industry || "Industry Unknown"} - {company.location || "Location Unknown"}
                 </span>
               }
@@ -90,7 +84,7 @@ export default function CompanyGrid() {
 
             {/* Company Size */}
             {company.size && (
-              <div className="flex justify-start mt-4 mb-3">
+              <div className="flex justify-start mt-2 mb-2 sm:mt-4 sm:mb-3 text-xs sm:text-sm">
                 <Tag color="blue">{company.size}</Tag>
               </div>
             )}
@@ -99,7 +93,7 @@ export default function CompanyGrid() {
             <Button
               type={followed[company.name] ? "default" : "primary"}
               block
-              className="!rounded-full mt-auto"
+              className="!rounded-full mt-auto text-xs sm:text-sm"
               onClick={() => handleFollow(company.name)}
               aria-label={`${followed[company.name] ? "Unfollow" : "Follow"} ${company.name}`}
             >
